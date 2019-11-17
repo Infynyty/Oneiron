@@ -1,0 +1,5 @@
+name: Oneiron
+version: 0.3.0
+author: Kasyyy
+api-version: 1.14
+main: de.kasyyy.oneiron.main.Oneiron
