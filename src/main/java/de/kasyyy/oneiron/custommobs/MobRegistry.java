@@ -25,6 +25,7 @@ public class MobRegistry {
     private static EntityTypes WEAK_ZOMBIE;
 
     public static final String WEAK_ZOMBIE_NAME = "WeakZombie";
+
     //Saves all Entitytypes so that they can be called by a string
     private static HashBiMap<String, EntityTypes> allEntities = HashBiMap.create();
     private static ArrayList<ItemStack> itemStacks = new ArrayList<>();
@@ -35,13 +36,13 @@ public class MobRegistry {
 
 
     public static org.bukkit.entity.Entity spawnEntity(EntityTypes entityTypes, Location loc) {
-        Entity nmsEntity = entityTypes.spawnCreature(((CraftWorld) Objects.requireNonNull(loc.getWorld())).getHandle(), // reference to the NMS world
+        Entity nmsEntity = entityTypes.spawnCreature(((CraftWorld) Objects.requireNonNull(loc.getWorld())).getHandle(),
                 null,
                 null,
                 null,
                 new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()),
-                EnumMobSpawn.MOB_SUMMONED, // the BlockPosition to spawn at
-                true, // center entity on BlockPosition and correct Y position for Entity's height
+                EnumMobSpawn.MOB_SUMMONED,
+                true,
                 false);
 
         //TODO: Set oneiron mob here
@@ -51,15 +52,9 @@ public class MobRegistry {
     }
 
     public static void injectNewEntity(String name, String extend_from) {
-        // get the server's datatypes (also referred to as "data fixers")
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).findChoiceType(DataConverterTypes.ENTITY).types();
-        // inject the new custom entity (this registers the
-        // name/id with the server so you can use it in things
-        // like the vanilla /summon command)
         types.put("minecraft:" + name, types.get("minecraft:" + extend_from));
         Type<?> type = types.get("minecraft:" + name);
-        // create and return an EntityTypes for the custom entity
-        // store this somewhere so you can reference it later (like for spawning)
 
     }
 
