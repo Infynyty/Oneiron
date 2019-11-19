@@ -41,10 +41,10 @@ public class Race implements Listener {
             e.setCancelled(true);
             OneironPlayer oneironPlayer = JoinEvent.getAllPlayers().get(e.getWhoClicked().getUniqueId());
             if(e.getCurrentItem().equals(archer)) {
-                oneironPlayer.setClasses(Races.ARCHER);
+                oneironPlayer.setRace(Races.ARCHER);
             }
             else if(e.getCurrentItem().equals(mage)) {
-                oneironPlayer.setClasses(Races.MAGE);
+                oneironPlayer.setRace(Races.MAGE);
             }
         }
     }

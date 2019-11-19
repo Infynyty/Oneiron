@@ -1,5 +1,6 @@
 package de.kasyyy.oneiron.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -9,15 +10,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 public class Util {
-    private static String prefix = ChatColor.AQUA + "[Oneiron]:  ";
-    private static String debug = ChatColor.RED + "[Debug]" + prefix;
+    private final static String PREFIX = ChatColor.AQUA + "[Oneiron]:  ";
+    private final static String DEBUG = ChatColor.RED + "[Debug]" + PREFIX;
+    private final static String ERR_RELOAD = PREFIX + ChatColor.RED + "Using </rl> will cause errors using this plugin";
+
+    public final static String ID = "ID";
 
     public static String getPrefix() {
-        return prefix;
+        return PREFIX;
     }
 
     public static String getDebug() {
-        return debug;
+        return DEBUG;
+    }
+
+    public static String getErrReload() {
+        return ERR_RELOAD;
     }
 
     public static ItemStack crItem(Material material, int amount, String name, List<String> lore) {
@@ -36,10 +44,12 @@ public class Util {
      * @param damage The amount of damage
      */
     public static void damageLivingEntity(LivingEntity entity, int damage) {
-        if((entity).getHealth() - damage < 0) {
+        if((entity).getHealth() - damage <= 0) {
             ( entity).setHealth(0);
         } else {
             entity.setHealth(entity.getHealth() - damage);
+            entity.damage(1);
+            Bukkit.broadcastMessage(Util.getDebug() + "Health: " + entity.getHealth());
         }
 
     }

@@ -1,7 +1,9 @@
 package de.kasyyy.oneiron.player;
 
 import de.kasyyy.oneiron.main.Oneiron;
+import de.kasyyy.oneiron.player.combo.attack.Attack;
 import de.kasyyy.oneiron.util.Util;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,9 +41,14 @@ public class JoinEvent implements Listener {
     //Removes the OnerionPlayer object
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
-        OneironPlayer oneironPlayer = allPlayers.get(e.getPlayer().getUniqueId());
-        oneironPlayer.saveToConfig();
-        allPlayers.remove(e.getPlayer().getUniqueId());
+        if(allPlayers.containsKey(e.getPlayer().getUniqueId())) {
+            OneironPlayer oneironPlayer = allPlayers.get(e.getPlayer().getUniqueId());
+            oneironPlayer.saveToConfig();
+            allPlayers.remove(e.getPlayer().getUniqueId());
+        }
+        if(Attack.getPlayerRegenerating().contains(e.getPlayer().getUniqueId())) {
+            Attack.getPlayerRegenerating().remove(e.getPlayer().getUniqueId());
+        }
     }
 
     public static HashMap<UUID, OneironPlayer> getAllPlayers() {
