@@ -35,7 +35,7 @@ public class MobRegistry {
     }
 
 
-    public static org.bukkit.entity.Entity spawnEntity(EntityTypes entityTypes, Location loc) {
+    public static org.bukkit.entity.Entity spawnEntity(EntityTypes entityTypes, Location loc, OneironMob oneironMob) {
         Entity nmsEntity = entityTypes.spawnCreature(((CraftWorld) Objects.requireNonNull(loc.getWorld())).getHandle(),
                 null,
                 null,
@@ -46,9 +46,10 @@ public class MobRegistry {
                 false);
 
         //TODO: Set oneiron mob here
-        OneironMob oneironMob = new OneironMob( 100, 10, 1, (LivingEntity) nmsEntity.getBukkitEntity(), itemStacks);
-        nmsEntity.getBukkitEntity().setMetadata(Util.ID, new FixedMetadataValue(Oneiron.getInstance(), oneironMob.getId()));
-        return nmsEntity != null ? nmsEntity.getBukkitEntity() : null; // convert to a Bukkit entity
+       oneironMob.setEntity((LivingEntity) nmsEntity.getBukkitEntity());
+       nmsEntity.getBukkitEntity().setMetadata(Util.ID, new FixedMetadataValue(Oneiron.getInstance(), oneironMob.getId()));
+
+       return nmsEntity != null ? nmsEntity.getBukkitEntity() : null; // convert to a Bukkit entity
     }
 
     public static void injectNewEntity(String name, String extend_from) {

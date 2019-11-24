@@ -18,6 +18,7 @@ public class OneironMob {
     private LivingEntity entity;
     private ArrayList<ItemStack> drops = new ArrayList<>();
 
+
     private static HashMap<Integer, OneironMob> oneironMobs = new HashMap<>();
 
     public OneironMob(int health, int damage, int level, LivingEntity entity) {
@@ -49,7 +50,6 @@ public class OneironMob {
             damager.sendMessage(Util.getDebug() + "Damage was: " + damageDealt + "; health was: " + health);
         } else {
             entity.setHealth(0);
-            Bukkit.broadcastMessage(Util.getDebug() + "Removed oneiron mob");
             oneironMobs.remove(id);
         }
 
@@ -78,5 +78,13 @@ public class OneironMob {
 
     public ArrayList<ItemStack> getDrops() {
         return drops;
+    }
+
+    public LivingEntity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(LivingEntity entity) {
+        this.entity = entity;
     }
 }

@@ -1,5 +1,6 @@
 package de.kasyyy.oneiron.player;
 
+import de.kasyyy.oneiron.items.weapons.WeaponManager;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Bukkit;
@@ -39,12 +40,16 @@ public class Race implements Listener {
     public void onInteract(InventoryClickEvent e) {
         if(e.getWhoClicked().getOpenInventory().getTopInventory().equals(chooseInv)) {
             e.setCancelled(true);
-            OneironPlayer oneironPlayer = JoinEvent.getAllPlayers().get(e.getWhoClicked().getUniqueId());
+            OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getWhoClicked().getUniqueId());
             if(e.getCurrentItem().equals(archer)) {
                 oneironPlayer.setRace(Races.ARCHER);
+                e.getWhoClicked().getOpenInventory().close();
             }
             else if(e.getCurrentItem().equals(mage)) {
                 oneironPlayer.setRace(Races.MAGE);
+                oneironPlayer.addMana(oneironPlayer.getMaxMana());
+                Bukkit.getPlayer(oneironPlayer.getUuid()).getInventory().addItem(WeaponManager.weakStaff.getItemStack());
+                e.getWhoClicked().getOpenInventory().close();
             }
         }
     }
@@ -53,7 +58,7 @@ public class Race implements Listener {
     @EventHandler
     public void closeInv(InventoryCloseEvent e) {
         if(e.getInventory().equals(chooseInv)) {
-            OneironPlayer oneironPlayer = JoinEvent.getAllPlayers().get(e.getPlayer().getUniqueId());
+            OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
             if(oneironPlayer.getClasses().equals(Races.NONE)) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Oneiron.getInstance(), () -> {
                     e.getPlayer().openInventory(chooseInv);
@@ -62,10 +67,6 @@ public class Race implements Listener {
 
             }
         }
-    }
-
-    public enum Races {
-        ARCHER, MAGE, NONE
     }
 }
 

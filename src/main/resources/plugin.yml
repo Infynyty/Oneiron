@@ -6,3 +6,7 @@ main: de.kasyyy.oneiron.main.Oneiron
 commands:
   cspawner:
     description: Creates a spawner for oneiron mobs
+  oneironitems:
+    description: A list of all items
+  setrace:
+    description: Sets a players race

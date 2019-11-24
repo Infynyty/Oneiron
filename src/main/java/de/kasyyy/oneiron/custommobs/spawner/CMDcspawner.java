@@ -26,8 +26,7 @@ public class CMDcspawner implements CommandExecutor {
                     return true;
                 }
                 p.sendMessage(Util.getPrefix() + "A new spawner has been created!");
-                Spawner spawner = new Spawner(p.getLocation(), MobRegistry.getAllEntities().get(strings[0]));
-                spawner.spawnMobs();
+                new Spawner(p.getLocation(), MobRegistry.getAllEntities().get(strings[0]));
             }
         }
         return true;

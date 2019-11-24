@@ -4,32 +4,41 @@ import de.kasyyy.oneiron.custommobs.MobRegistry;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.SpawnEntity;
+import net.minecraft.server.v1_14_R1.Entity;
 import net.minecraft.server.v1_14_R1.EntityTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Spawner {
-    private Location location;
-    private EntityTypes entity;
-    private ArrayList<Location> locationArrayList = new ArrayList<>();
 
-    private Oneiron instance = Oneiron.getInstance();
+    private static Oneiron instance = Oneiron.getInstance();
     private static int amount = 0;
 
     public Spawner(Location location, EntityTypes entity) {
-        this.location = location;
-        this.entity = entity;
+        amount++;
+        instance.getConfig().set("Spawner." + amount + ".World", location.getWorld().getName());
         instance.getConfig().set("Spawner." + amount + ".X", location.getX());
         instance.getConfig().set("Spawner." + amount + ".Y", location.getY());
         instance.getConfig().set("Spawner." + amount + ".Z", location.getZ());
         instance.getConfig().set("Spawner." + amount + ".Mob", MobRegistry.getAllEntities().inverse().get(entity));
+        instance.getConfig().set("Spawner.Amount", amount);
         instance.saveConfig();
+        spawnMobs(location, entity);
     }
 
-    public void spawnMobs() {
+    /**
+     * Creates four Locations out of one, set in the shape of a square
+     *
+     * @param location The middle of the square
+     * @return Returns an ArrayList with all four Locations
+     */
+    private static ArrayList<Location> createLocsFromLoc(Location location) {
+        ArrayList<Location> locationArrayList = new ArrayList<>();
+
         org.bukkit.Location loc1, loc2, loc3, loc4;
         loc1 = new Location(location.getWorld(), location.getX() + 3, location.getY(), location.getZ());
         loc2 = new Location(location.getWorld(), location.getX() - 3, location.getY(), location.getZ());
@@ -41,18 +50,45 @@ public class Spawner {
         locationArrayList.add(loc3);
         locationArrayList.add(loc4);
 
-        Bukkit.broadcastMessage(Util.getDebug() + "Created all four locations!: " + loc1 + loc2);
-
         for(Location locInUse : locationArrayList) {
             while (locInUse.getBlock().getType() != Material.AIR) {
                 locInUse.add(0, 1, 0);
             }
         }
+
+        return locationArrayList;
+    }
+
+    /**
+     * Spawns a custom enity at a given location
+     * @param location
+     * @param entity
+     */
+    public static void spawnMobs(Location location, EntityTypes entity) {
+        ArrayList<Location> locationArrayList = createLocsFromLoc(location);
         new SpawnEntity(entity, locationArrayList).runTaskTimer(instance, 0, 20*10);
+    }
+
+
+    /**
+     * Reloads all spawners from the config file
+     * @param i The integer to iterate over
+     */
+    public static void reloadSpawner(int i) {
+        Location location = new Location(Bukkit.getWorld(Oneiron.getInstance().getConfig().getString("Spawner." + i + ".World")),
+                Oneiron.getInstance().getConfig().getDouble("Spawner." + i + ".X"),
+                Oneiron.getInstance().getConfig().getDouble("Spawner." + i + ".Y"),
+                Oneiron.getInstance().getConfig().getDouble("Spawner." + i + ".Z"));
+        EntityTypes entity = MobRegistry.getAllEntities().get(Oneiron.getInstance().getConfig().getString("Spawner." + i + ".Mob"));
+        spawnMobs(location, entity);
     }
 
 
     public static void setAmount(int amount) {
         Spawner.amount = amount;
+    }
+
+    public static int getAmount() {
+        return amount;
     }
 }

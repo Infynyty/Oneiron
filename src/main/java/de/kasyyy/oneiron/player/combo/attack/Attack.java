@@ -2,7 +2,7 @@ package de.kasyyy.oneiron.player.combo.attack;
 
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.OneironPlayer;
-import de.kasyyy.oneiron.player.Race;
+import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.ManaRegeneration;
 import org.bukkit.Bukkit;
@@ -20,13 +20,13 @@ public abstract class Attack {
     String name;
     Particle particle;
     Effect effect;
-    Race.Races races;
+    Races races;
     private final int MANA_REGENERATION = 5;
 
     private static ArrayList<UUID> playerRegenerating = new ArrayList<>();
 
 
-    public Attack(int damage, int range, int manaCost, String name, Particle particle, Race.Races races) {
+    public Attack(int damage, int range, int manaCost, String name, Particle particle, Races races) {
         this.damage = damage;
         this.range = range;
         this.manaCost = manaCost;
@@ -35,7 +35,7 @@ public abstract class Attack {
         this.races = races;
     }
 
-    public Attack(int damage, int range, int manaCost, String name, Effect effect, Race.Races races) {
+    public Attack(int damage, int range, int manaCost, String name, Effect effect, Races races) {
         this.damage = damage;
         this.range = range;
         this.manaCost = manaCost;

@@ -13,13 +13,13 @@ public class OneironPlayer {
     private final String name;
     private final UUID uuid;
     private int level, maxHealth, maxMana, xp, health, mana;
-    private Race.Races race;
+    private Races race;
     private Attack attack1, attack2, attack3, attack4;
 
     private Oneiron instance = Oneiron.getInstance();
 
 
-    public OneironPlayer(String name, UUID uuid, int level, int health, int mana, int xp, Race.Races race) {
+    public OneironPlayer(String name, UUID uuid, int level, int health, int mana, int xp, Races race) {
         this.name = name;
         this.uuid = uuid;
         this.level = level;
@@ -36,7 +36,7 @@ public class OneironPlayer {
     public OneironPlayer (UUID uuid) {
         if(instance.getConfig().contains(uuid.toString())) {
             this.uuid = uuid;
-            this.race = Race.Races.valueOf(instance.getConfig().getString(uuid.toString() + ".Class"));
+            this.race = Races.valueOf(instance.getConfig().getString(uuid.toString() + ".Class"));
             this.maxHealth = instance.getConfig().getInt(uuid.toString() + ".Health");
             this.level = instance.getConfig().getInt(uuid.toString() + ".Level");
             this.maxMana = instance.getConfig().getInt(uuid.toString() + ".Mana");
@@ -70,15 +70,28 @@ public class OneironPlayer {
      * @param damageAmount The damage dealt
      */
     public void damage(int damageAmount) {
-        if(health -damageAmount <= 0) {
-            Objects.requireNonNull(Bukkit.getPlayer(uuid)).teleport(Objects.requireNonNull(Objects.requireNonNull(Bukkit.getPlayer(uuid)).getBedSpawnLocation()));
+        if(health - damageAmount <= 0) {
+            health = maxHealth;
+            mana = maxMana;
         } else {
             health -= damageAmount;
         }
     }
 
     /**
-     * Use this method to subtract mana from the OneironPlayer
+     * Use this method to heal an Oneiron player
+     * @param healAmount The amount of health to be regenerated
+     */
+    public void heal(int healAmount) {
+        if(health + healAmount >= maxHealth) {
+            health = maxHealth;
+        } else {
+            health += healAmount;
+        }
+    }
+
+    /**
+     * Use this method to subtract mana from the Oneiron Player
      *
      * @param manaAmount The amount subtracted
      * @return true: There was enough mana
@@ -87,11 +100,9 @@ public class OneironPlayer {
     public boolean removeMana(int manaAmount) {
 
         if(mana - manaAmount < 0) {
-            Bukkit.broadcastMessage(Util.getDebug() + "Mana: " + mana + "; Needed: " + manaAmount);
             return false;
         } else {
             mana -= manaAmount;
-            Bukkit.broadcastMessage(Util.getDebug() + "Mana: " + mana);
             return true;
         }
     }
@@ -106,7 +117,6 @@ public class OneironPlayer {
             mana = maxMana;
         } else {
             mana += manaAmount;
-            Bukkit.broadcastMessage(Util.getDebug() + "Added mana: " + manaAmount);
         }
     }
 
@@ -130,10 +140,11 @@ public class OneironPlayer {
         instance.saveConfig();
     }
 
-    public void setRace(Race.Races race) {
+    public void setRace(Races race) {
         switch (race) {
             case MAGE:
                 attack1 = AttackManager.getExplosionLv1();
+                attack2 = AttackManager.getLightningLv1();
                 break;
             case ARCHER:
                 attack1 = AttackManager.getSlamLv1();
@@ -142,7 +153,6 @@ public class OneironPlayer {
                 break;
         }
         this.race = race;
-        instance.saveConfig();
     }
     public String getName() {
         return name;
@@ -164,7 +174,7 @@ public class OneironPlayer {
         return mana;
     }
 
-    public Race.Races getClasses() {
+    public Races getClasses() {
         return race;
     }
 
@@ -190,5 +200,9 @@ public class OneironPlayer {
 
     public int getMaxMana() {
         return maxMana;
+    }
+
+    public int getHealth() {
+        return health;
     }
 }

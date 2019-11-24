@@ -1,10 +1,9 @@
 package de.kasyyy.oneiron.player.combo.attack;
 
-import de.kasyyy.oneiron.player.Race;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import de.kasyyy.oneiron.custommobs.OneironMob;
+import de.kasyyy.oneiron.player.Races;
+import de.kasyyy.oneiron.util.Util;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -18,7 +17,7 @@ import java.util.Set;
 public class Explosion extends Attack {
 
 
-    public Explosion(int damage, int range, int manaCost, String name, Particle particle, Race.Races races) {
+    public Explosion(int damage, int range, int manaCost, String name, Particle particle, Races races) {
         super(damage, range, manaCost, name, particle, races);
     }
 
@@ -49,17 +48,18 @@ public class Explosion extends Attack {
 
         location.getWorld().spawnParticle(particle, location.add(0, 1,0 ), 1);
         location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1.5F, 1.5F);
+
         //All enemies near the attack location are attacked
-        List<Entity> entities = (List<Entity>) location.getWorld().getNearbyEntities(location, (float) range/10, (float) range/10, (float) range/10);
+        List<Entity> entities = (List<Entity>) location.getWorld().getNearbyEntities(location, (float) range/5, (float) range/5, (float) range/5, x -> x.hasMetadata(Util.ID));
 
         for(Entity entity: entities) {
-            if(!(entity instanceof LivingEntity)) continue;
-            if(entity.equals(p)) continue;
-            if(((LivingEntity) entity).getHealth() - damage < 0) {
-                ((LivingEntity) entity).setHealth(0);
-            } else {
-                ((LivingEntity) entity).setHealth(((LivingEntity) entity).getHealth() - damage);
+            OneironMob oneironMob = OneironMob.getOneironMobs().get(entity.getMetadata(Util.ID).get(0).asInt());
+            if(oneironMob != null) {
+                oneironMob.damageEntity(damage, p);
             }
+
+
+
         }
 
     }

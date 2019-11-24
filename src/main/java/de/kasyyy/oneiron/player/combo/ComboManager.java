@@ -1,19 +1,17 @@
 package de.kasyyy.oneiron.player.combo;
 
+import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.JoinEvent;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.player.combo.attack.AttackManager;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.DelayedTask;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
@@ -24,24 +22,14 @@ public class ComboManager implements Listener {
 
     private Oneiron instance = Oneiron.getInstance();
 
-    public HashMap<UUID, Integer> getComboPoints() {
+    public static HashMap<UUID, Integer> getComboPoints() {
         return comboPoints;
     }
 
-    private HashMap<UUID, Integer> comboPoints = new HashMap<>();
+    private static HashMap<UUID, Integer> comboPoints = new HashMap<>();
     private ArrayList<UUID> coolDown = new ArrayList<>();
     private BukkitTask cancelTask;
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        comboPoints.put(e.getPlayer().getUniqueId(), 1);
-        e.getPlayer().getInventory().addItem(TESTINGComboItems.getSword());
-    }
-
-    @EventHandler
-    public void onLeave(PlayerQuitEvent e) {
-        comboPoints.remove(e.getPlayer().getUniqueId());
-    }
 
     //Depending on the points it is possible to see which part of the combo a player is in
     //1 point: Right or Left (use D for debugging) (not important because each class only has either R or L to start a combo)
@@ -52,18 +40,35 @@ public class ComboManager implements Listener {
     @SuppressWarnings("Deprecated")
     @EventHandler
     public void onClick(PlayerInteractEvent e) {
-        if(!(TESTINGComboItems.getClassItems().contains(e.getPlayer().getItemInHand()))) return;
 
-        comboPoints.putIfAbsent(e.getPlayer().getUniqueId(), 1); //Prevents a player from not being in the Hashmap
+        OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
         Player p = e.getPlayer();
-        if(!(JoinEvent.getAllPlayers().containsKey(p.getUniqueId()))) {
+
+        if(!(JoinEvent.getAllOneironPlayers().containsKey(p.getUniqueId()))) {
             p.kickPlayer(Util.getErrReload());
             return;
         }
-        OneironPlayer oneironPlayer = JoinEvent.getAllPlayers().get(p.getUniqueId());
+        if(!(OneironWeapon.getRaceSpecificList()).containsKey(OneironWeapon.getOWFromIS().get(e.getPlayer().getItemInHand()))) {
+            e.getPlayer().sendMessage(Util.getDebug() + "This weapon doesnt exist");
+            return;
+        }
+        if(!(oneironPlayer.getClasses() == OneironWeapon.getRaceSpecificList().get(OneironWeapon.getOWFromIS().get(e.getPlayer().getItemInHand())))) {
+            e.getPlayer().sendMessage(Util.getDebug() + "Your race is wrong");
+            return;
+        }
+
+        //Prevents a player from not being in the Hashmap
+        comboPoints.putIfAbsent(e.getPlayer().getUniqueId(), 1);
+
+
+        if(!(JoinEvent.getAllOneironPlayers().containsKey(p.getUniqueId()))) {
+            p.kickPlayer(Util.getErrReload());
+            return;
+        }
 
         if(coolDown.contains(p.getUniqueId())) return;
         coolDown.add(p.getUniqueId());
+
         switch (comboPoints.get(p.getUniqueId())) {
             case 1:
                 comboPoints.put(p.getUniqueId(), 2);
@@ -77,6 +82,8 @@ public class ComboManager implements Listener {
                     comboPoints.put(p.getUniqueId(), comboPoints.get(p.getUniqueId()) + 2);
                     break;
                 }
+
+
             case 3:
                 if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                     comboPoints.put(p.getUniqueId(), 1);
@@ -86,7 +93,7 @@ public class ComboManager implements Listener {
                 }
                 if(e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                     comboPoints.put(p.getUniqueId(), 1);
-                    AttackManager.getSlamLv1().attackUsed(oneironPlayer);
+                    oneironPlayer.getAttack2().attackUsed(oneironPlayer);
                     break;
                 }
             case 4:
@@ -121,5 +128,6 @@ public class ComboManager implements Listener {
 
         cancelTask = new DelayedTask(p, comboPoints).runTaskTimer(instance, 0, 30);
     }
+
 
 }

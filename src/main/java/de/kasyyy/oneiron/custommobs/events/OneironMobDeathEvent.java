@@ -12,7 +12,6 @@ public class OneironMobDeathEvent implements Listener {
     @EventHandler
     public void onDeath(EntityDeathEvent e) {
         if(e.getEntity().hasMetadata(Util.ID)) {
-            Bukkit.broadcastMessage(Util.getDebug() + "OneironMob died!");
             OneironMob oneironMob = OneironMob.getOneironMobs().get(e.getEntity().getMetadata(Util.ID).get(0).asInt());
             e.setDroppedExp(0);
             e.getDrops().clear();
