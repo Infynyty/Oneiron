@@ -4,8 +4,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import java.util.List;
-
 public class PlayerDamagedHungerEvent implements Listener {
 
     @EventHandler

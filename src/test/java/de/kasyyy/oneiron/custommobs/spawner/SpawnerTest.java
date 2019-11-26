@@ -1,7 +1,6 @@
 package de.kasyyy.oneiron.custommobs.spawner;
 
 import de.kasyyy.oneiron.custommobs.MobRegistry;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import net.minecraft.server.v1_14_R1.EntityTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

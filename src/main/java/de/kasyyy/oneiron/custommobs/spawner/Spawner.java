@@ -4,14 +4,13 @@ import de.kasyyy.oneiron.custommobs.MobRegistry;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.SpawnEntity;
-import net.minecraft.server.v1_14_R1.Entity;
 import net.minecraft.server.v1_14_R1.EntityTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Spawner {
 
@@ -28,6 +27,7 @@ public class Spawner {
         instance.getConfig().set("Spawner.Amount", amount);
         instance.saveConfig();
         spawnMobs(location, entity);
+
     }
 
     /**
@@ -60,13 +60,13 @@ public class Spawner {
     }
 
     /**
-     * Spawns a custom enity at a given location
+     * Spawns a custom entity at a given location
      * @param location
      * @param entity
      */
-    public static void spawnMobs(Location location, EntityTypes entity) {
+    private static void spawnMobs(Location location, EntityTypes entity) {
         ArrayList<Location> locationArrayList = createLocsFromLoc(location);
-        new SpawnEntity(entity, locationArrayList).runTaskTimer(instance, 0, 20*10);
+        new SpawnEntity(entity, locationArrayList, null).runTaskTimer(instance, 0, 20*10);
     }
 
 
@@ -81,6 +81,7 @@ public class Spawner {
                 Oneiron.getInstance().getConfig().getDouble("Spawner." + i + ".Z"));
         EntityTypes entity = MobRegistry.getAllEntities().get(Oneiron.getInstance().getConfig().getString("Spawner." + i + ".Mob"));
         spawnMobs(location, entity);
+        Bukkit.getConsoleSender().sendMessage(Util.getDebug() + entity.a(((CraftWorld) location.getWorld()).getHandle()).getCustomName().g().getString());
     }
 
 

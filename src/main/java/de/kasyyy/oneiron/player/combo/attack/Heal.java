@@ -1,0 +1,20 @@
+package de.kasyyy.oneiron.player.combo.attack;
+
+import de.kasyyy.oneiron.player.JoinEvent;
+import de.kasyyy.oneiron.player.OneironPlayer;
+import de.kasyyy.oneiron.player.Races;
+import org.bukkit.Particle;
+import org.bukkit.entity.Player;
+
+public class Heal extends Attack {
+    public Heal(double damagePercent, int range, int manaCost, String name, Particle particle, Races races) {
+        super(damagePercent, range, manaCost, name, particle, races);
+    }
+
+    @Override
+    protected void attack(Player p) {
+        OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(p.getUniqueId());
+        oneironPlayer.heal(Math.round(oneironPlayer.getMaxHealth() / 8));
+        p.getLocation().getWorld().spawnParticle(particle, p.getLocation(), 10);
+    }
+}

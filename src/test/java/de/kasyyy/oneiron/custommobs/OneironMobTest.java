@@ -18,8 +18,10 @@ import static org.junit.Assert.*;
 public class OneironMobTest {
 
     @Mock Entity entity;
-    OneironMob oneironMob1 = new OneironMob(1, 1, 1, (LivingEntity) entity);
-    OneironMob oneironMob2 = new OneironMob(1, 1, 1, (LivingEntity) entity);
+    private OneironMobTemplate oneironMobTemplate1 = new OneironMobTemplate(null, 1, 1, 1, null, 1);
+    private OneironMobTemplate oneironMobTemplate2 = new OneironMobTemplate(null, 1, 1, 1, null, 1);
+    private OneironMob oneironMob1 = new OneironMob(oneironMobTemplate1, (LivingEntity) entity);
+    private OneironMob oneironMob2 = new OneironMob(oneironMobTemplate2, (LivingEntity) entity);
 
     @Test
     public void mobsShouldNotHaveSameID() {

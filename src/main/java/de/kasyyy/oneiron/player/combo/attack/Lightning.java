@@ -1,15 +1,17 @@
 package de.kasyyy.oneiron.player.combo.attack;
 
 import de.kasyyy.oneiron.custommobs.OneironMob;
+import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,8 +19,10 @@ import java.util.List;
 import java.util.Set;
 
 public class Lightning extends Attack {
-    public Lightning(int damage, int range, int manaCost, String name, Particle particle, Races races) {
-        super(damage, range, manaCost, name, particle, races);
+
+
+    public Lightning(double damagePercent, int range, int manaCost, String name, Particle particle, Races races) {
+        super(damagePercent, range, manaCost, name, particle, races);
     }
 
     @Override
@@ -46,13 +50,13 @@ public class Lightning extends Attack {
         }
         //Spawns a lightning bolt
         p.getLocation().getWorld().strikeLightningEffect(location);
-        p.getLocation().getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1.0F, 1.0F);
+        p.getLocation().getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.1F, 0.1F);
         List<Entity> entities = (List<Entity>) location.getWorld().getNearbyEntities(location, (float) range / 5, (float) range / 5, (float) range / 5, x -> x.hasMetadata(Util.ID));
 
         for (Entity entity : entities) {
             OneironMob oneironMob = OneironMob.getOneironMobs().get(entity.getMetadata(Util.ID).get(0).asInt());
             if (oneironMob != null) {
-                oneironMob.damageEntity(damage, p);
+                oneironMob.damageEntity((int) Math.round(OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent), p);
             }
         }
     }

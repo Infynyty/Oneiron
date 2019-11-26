@@ -31,15 +31,12 @@ public class HealthRegeneration extends BukkitRunnable {
             float percent = (float) oneironPlayer.getHealth() / (float) oneironPlayer.getMaxHealth();
 
             if (oneironPlayer.getHealth() + addedHealth >= oneironPlayer.getMaxHealth()) {
-                player.setHealth(Math.round(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()));
                 oneironPlayer.heal(addedHealth);
                 player.sendMessage(Util.getDebug() + "You have been healed fully!");
-
                 playerRegenerating.remove(oneironPlayer.getUuid());
                 cancel();
             } else {
                 oneironPlayer.heal(addedHealth);
-                player.setHealth(Math.round(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue() * percent));
                 player.sendMessage(Util.getDebug() + "You have been healed! Your health: " + oneironPlayer.getHealth());
             }
         } else {

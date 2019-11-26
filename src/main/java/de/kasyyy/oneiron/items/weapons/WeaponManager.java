@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class WeaponManager {
 
     public static OneironItem weakStaff;
+    public static OneironWeapon greatStaff;
     private WeaponManager() {}
 
     public static void loadWeapons() {
@@ -20,7 +21,12 @@ public class WeaponManager {
                 Util.crItem(Material.STICK, 1, ChatColor.GREEN + "Weak Staff",
                         new ArrayList<String>() {{
                             add(ChatColor.DARK_PURPLE + "A weak staff");
-                        }}), 10);
+                        }}), 50, 10);
+        greatStaff = new OneironWeapon(10, Races.MAGE, true, true,
+                Util.crItem(Material.BLAZE_ROD, 1, ChatColor.DARK_AQUA + "Great Staff",
+                        new ArrayList<String>() {{
+                            add(ChatColor.DARK_PURPLE + "A staff of unheard magic power");
+                        }}), 10, 100);
 
     }
 

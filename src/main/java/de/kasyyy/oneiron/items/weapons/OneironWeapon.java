@@ -17,8 +17,8 @@ public class OneironWeapon extends OneironItem {
     private static HashMap<OneironWeapon, Races> raceSpecificList = new HashMap<>();
     private static HashMap<ItemStack, OneironWeapon> OWFromIS = new HashMap<>(); //OW = OneironWeapon; IS = ItemStack
 
-    public OneironWeapon(int value, Races race, boolean dropable, boolean sellable, ItemStack itemStack, int damage) {
-        super(value, race, dropable, sellable, itemStack);
+    public OneironWeapon(int value, Races race, boolean dropable, boolean sellable, ItemStack itemStack, int dropChance, int damage) {
+        super(value, race, dropable, sellable, itemStack, dropChance);
         this.damage = damage;
         raceSpecificList.put(this, race);
         OWFromIS.put(itemStack, this);

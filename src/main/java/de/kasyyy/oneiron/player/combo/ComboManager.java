@@ -4,7 +4,6 @@ import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.JoinEvent;
 import de.kasyyy.oneiron.player.OneironPlayer;
-import de.kasyyy.oneiron.player.combo.attack.AttackManager;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.DelayedTask;
 import org.bukkit.entity.Player;
@@ -99,10 +98,12 @@ public class ComboManager implements Listener {
             case 4:
                 if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                     comboPoints.put(p.getUniqueId(), 1);
+                    oneironPlayer.getAttack3().attackUsed(oneironPlayer);
                     break;
                 }
                 if(e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                     comboPoints.put(p.getUniqueId(), 1);
+                    oneironPlayer.getAttack4().attackUsed(oneironPlayer);
                     break;
                 }
             default:

@@ -1,56 +1,65 @@
 package de.kasyyy.oneiron.custommobs;
 
+import de.kasyyy.oneiron.items.OneironItem;
+import de.kasyyy.oneiron.player.JoinEvent;
+import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.util.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class OneironMob {
-    private int health;
-    private int damage;
-    private int level;
-    private int id;
+public class OneironMob extends OneironMobTemplate{
+    private int health, maxHealth, damage, level, id, xp;
     private static int counter = 0;
     private LivingEntity entity;
-    private ArrayList<ItemStack> drops = new ArrayList<>();
-
+    private ArrayList<OneironItem> drops;
+    private static HashMap<String, OneironMob> getOMbyName = new HashMap<>();
+    private String name;
 
     private static HashMap<Integer, OneironMob> oneironMobs = new HashMap<>();
 
-    public OneironMob(int health, int damage, int level, LivingEntity entity) {
-        this.health = health;
-        this.damage = damage;
-        this.level = level;
+
+    public OneironMob(OneironMobTemplate oneironMobTemplate, LivingEntity entity) {
+        super(oneironMobTemplate.name, oneironMobTemplate.health, oneironMobTemplate.level, oneironMobTemplate.damage, oneironMobTemplate.drops, oneironMobTemplate.xp);
+        //TODO: might cause bugs
+        this.xp = oneironMobTemplate.xp;
+        this.drops = oneironMobTemplate.drops;
+        this.damage = oneironMobTemplate.damage;
+        this.level = oneironMobTemplate.level;
+        this.name = oneironMobTemplate.name;
+        this.health = oneironMobTemplate.health;
         this.entity = entity;
+        this.maxHealth = health;
         id = counter;
         counter++;
         oneironMobs.put(id, this);
     }
 
-    public OneironMob(int health, int damage, int level, LivingEntity entity, ArrayList<ItemStack> drops) {
-        this.health = health;
-        this.damage = damage;
-        this.level = level;
-        this.id = id;
-        this.entity = entity;
-        this.drops = drops;
-        id = counter;
-        counter++;
-        oneironMobs.put(id, this);
-    }
 
     public void damageEntity(int damageDealt, org.bukkit.entity.Entity damager) {
-        if(health - damageDealt > 0) {
-            health -= damageDealt;
-            entity.damage(0);
-            damager.sendMessage(Util.getDebug() + "Damage was: " + damageDealt + "; health was: " + health);
+        if(this.health - damageDealt > 0) {
+            this.health -= damageDealt;
+            this.entity.setCustomName(this.name + ChatColor.AQUA +  " [" + this.health + "/" + maxHealth + "]");
+            this.entity.damage(0);
+            damager.sendMessage(Util.getDebug() + "Damage was: " + damageDealt + "; health was: " + this.health);
         } else {
-            entity.setHealth(0);
+            this.entity.setHealth(0);
             oneironMobs.remove(id);
+            if(!(damager instanceof Player)) return;
+            if(drops.size() > 0) {
+                for (OneironItem oneironItem : drops) {
+                    int i = ThreadLocalRandom.current().nextInt(1000);
+                    if (i < oneironItem.getDropChance()) {
+                        this.entity.getLocation().getWorld().dropItem(this.getEntity().getLocation(), oneironItem.getItemStack());
+                    }
+                }
+            }
+            OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(damager.getUniqueId());
+            oneironPlayer.addXP(this.xp);
         }
 
     }
@@ -65,26 +74,30 @@ public class OneironMob {
 
 
     public int getHealth() {
-        return health;
+        return this.health;
     }
 
     public int getDamage() {
-        return damage;
+        return this.damage;
     }
 
     public int getLevel() {
-        return level;
+        return this.level;
     }
 
-    public ArrayList<ItemStack> getDrops() {
-        return drops;
+    public ArrayList<OneironItem> getDrops() {
+        return this.drops;
     }
 
     public LivingEntity getEntity() {
-        return entity;
+        return this.entity;
     }
 
     public void setEntity(LivingEntity entity) {
         this.entity = entity;
+    }
+
+    public String getName() {
+        return name;
     }
 }

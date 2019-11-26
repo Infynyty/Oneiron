@@ -8,15 +8,18 @@ public class AttackManager {
     private AttackManager() {}
 
     //Explosions
-    private static final Attack EXPLOSION_LV_1 = new Explosion(10, 20, 10, "Weak Explosion", Particle.EXPLOSION_NORMAL, Races.MAGE);
-    private static final Attack EXPLOSION_LV_2 = new Explosion(15, 25, 12, "Normal Explosion", Particle.EXPLOSION_LARGE, Races.MAGE);
-    private static final Attack EXPLOSION_LV_3 = new Explosion(20, 35, 15, "Huge Explosion", Particle.EXPLOSION_HUGE, Races.MAGE);
+    private static final Attack EXPLOSION_LV_1 = new Explosion(2.0D, 20, 10, "Weak Explosion", Particle.EXPLOSION_NORMAL, Races.MAGE);
+    private static final Attack EXPLOSION_LV_2 = new Explosion(2.0D, 25, 12, "Normal Explosion", Particle.EXPLOSION_LARGE, Races.MAGE);
+    private static final Attack EXPLOSION_LV_3 = new Explosion(2.0D, 35, 15, "Huge Explosion", Particle.EXPLOSION_HUGE, Races.MAGE);
 
     //Slams
-    private static final Attack SLAM_LV_1 = new Slam(10, 0, 10, "Weak Slam", Particle.DRAGON_BREATH, Races.ARCHER);
+    private static final Attack SLAM_LV_1 = new Slam(0.5D, 0, 10, "Weak Slam", Particle.DRAGON_BREATH, Races.ARCHER);
 
     //Lighting bolts
-    private final static Attack LIGHTNING_LV_1 = new Lightning(50, 30, 20, "Weak Lighning", null, Races.MAGE);
+    private final static Attack LIGHTNING_LV_1 = new Lightning(4.0D, 30, 40, "Weak Lightning", null, Races.MAGE);
+
+    //Heal
+    private static final Attack HEAL_LV_1 = new Heal(0, 0, 10, "Weak healing", Particle.FIREWORKS_SPARK, Races.MAGE);
 
 
     public static Attack getExplosionLv1() {
@@ -37,5 +40,9 @@ public class AttackManager {
 
     public static Attack getLightningLv1() {
         return LIGHTNING_LV_1;
+    }
+
+    public static Attack getHealLv1() {
+        return HEAL_LV_1;
     }
 }

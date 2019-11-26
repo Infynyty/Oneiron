@@ -10,3 +10,5 @@ commands:
     description: A list of all items
   setrace:
     description: Sets a players race
+  lvlreset:
+    description: Resets a players level and race

@@ -1,9 +1,13 @@
 package de.kasyyy.oneiron.player.combo.attack;
 
 import de.kasyyy.oneiron.custommobs.OneironMob;
+import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -17,8 +21,8 @@ import java.util.Set;
 public class Explosion extends Attack {
 
 
-    public Explosion(int damage, int range, int manaCost, String name, Particle particle, Races races) {
-        super(damage, range, manaCost, name, particle, races);
+    public Explosion(double damagePercent, int range, int manaCost, String name, Particle particle, Races races) {
+        super(damagePercent, range, manaCost, name, particle, races);
     }
 
     @Override
@@ -55,7 +59,7 @@ public class Explosion extends Attack {
         for(Entity entity: entities) {
             OneironMob oneironMob = OneironMob.getOneironMobs().get(entity.getMetadata(Util.ID).get(0).asInt());
             if(oneironMob != null) {
-                oneironMob.damageEntity(damage, p);
+                oneironMob.damageEntity((int) Math.round(OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent), p);
             }
 
 

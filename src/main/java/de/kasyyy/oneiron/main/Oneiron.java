@@ -1,8 +1,10 @@
 package de.kasyyy.oneiron.main;
 
 import de.kasyyy.oneiron.custommobs.MobRegistry;
-import de.kasyyy.oneiron.custommobs.OneironMob;
+import de.kasyyy.oneiron.custommobs.OneironMobManager;
+import de.kasyyy.oneiron.custommobs.events.OMDamagedByOM;
 import de.kasyyy.oneiron.custommobs.events.OneironMobDeathEvent;
+import de.kasyyy.oneiron.custommobs.events.SlimeSplitEvent;
 import de.kasyyy.oneiron.custommobs.spawner.CMDcspawner;
 import de.kasyyy.oneiron.custommobs.spawner.Spawner;
 import de.kasyyy.oneiron.items.CMDoneironItems;
@@ -13,9 +15,7 @@ import de.kasyyy.oneiron.player.combo.ComboManager;
 import de.kasyyy.oneiron.player.combo.attack.Attack;
 import de.kasyyy.oneiron.player.events.*;
 import de.kasyyy.oneiron.util.Util;
-import net.minecraft.server.v1_14_R1.EntityTypes;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -50,12 +50,16 @@ public class Oneiron extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new PlayerDamagedHungerEvent(), this);
         this.getServer().getPluginManager().registerEvents(new OneironMobDeathEvent(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerRegenerationEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new SlimeSplitEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new OMDamagedByOM(), this);
 
         this.getCommand("cspawner").setExecutor(new CMDcspawner());
         this.getCommand("oneironitems").setExecutor(new CMDoneironItems());
         this.getCommand("setrace").setExecutor(new CMDSetRace());
+        this.getCommand("lvlreset").setExecutor(new CMDLevelReset());
         setupConfig();
         WeaponManager.loadWeapons();
+        OneironMobManager.loadOneironMobs();
 
         //Creates an Oneiron player after a reload
         for(Player p : Bukkit.getOnlinePlayers()) {
@@ -95,7 +99,7 @@ public class Oneiron extends JavaPlugin {
                 JoinEvent.getAllOneironPlayers().remove(p.getUniqueId());
             }
             Attack.getPlayerRegenerating().remove(p.getUniqueId());
-            PlayerDamageEvent.getPlayerRegenerating().remove(p.getUniqueId());
+            OneironPlayer.getPlayerRegenerating().remove(p.getUniqueId());
         }
         instance = null;
     }
@@ -107,6 +111,9 @@ public class Oneiron extends JavaPlugin {
     private void setupConfig() {
         this.getConfig().options().copyDefaults(true);
         this.getConfig().addDefault("Spawner.Amount", 0);
+        for(int i = 0; i < 20; i++) {
+            this.getConfig().addDefault("Level." + i, 100 + 2*i);
+        }
         saveConfig();
         Spawner.setAmount(this.getConfig().getInt("Spawner.Amount"));
 

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Attack {
-    int damage;
+    double damagePercent;
     int range;
     int manaCost;
     String name;
@@ -26,8 +26,8 @@ public abstract class Attack {
     private static ArrayList<UUID> playerRegenerating = new ArrayList<>();
 
 
-    public Attack(int damage, int range, int manaCost, String name, Particle particle, Races races) {
-        this.damage = damage;
+    public Attack(double damagePercent, int range, int manaCost, String name, Particle particle, Races races) {
+        this.damagePercent = damagePercent;
         this.range = range;
         this.manaCost = manaCost;
         this.name = name;
@@ -35,8 +35,8 @@ public abstract class Attack {
         this.races = races;
     }
 
-    public Attack(int damage, int range, int manaCost, String name, Effect effect, Races races) {
-        this.damage = damage;
+    public Attack(double damagePercent, int range, int manaCost, String name, Effect effect, Races races) {
+        this.damagePercent = damagePercent;
         this.range = range;
         this.manaCost = manaCost;
         this.name = name;

@@ -1,9 +1,7 @@
 package de.kasyyy.oneiron.util.runnables;
 
 import de.kasyyy.oneiron.custommobs.OneironMob;
-import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.util.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
