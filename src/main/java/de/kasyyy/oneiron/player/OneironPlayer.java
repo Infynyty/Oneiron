@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class OneironPlayer {
     private final String name;
     private final UUID uuid;
     private int level, maxHealth, maxMana, xp, health, mana;
+    private boolean isInvincible = false;
     private Races race;
     private Attack attack1, attack2, attack3, attack4;
     private static ArrayList<UUID> playerRegenerating = new ArrayList<>();
@@ -81,7 +83,7 @@ public class OneironPlayer {
      * @param damageAmount The damage dealt
      */
     public void damage(int damageAmount) {
-
+        if(isInvincible) return;
         int result = health - damageAmount;
         if(result <= 0) {
             health = maxHealth;
@@ -93,6 +95,14 @@ public class OneironPlayer {
             p.setVelocity(new Vector(0, 0, 0));
             p.getLocation().getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 3.0F, 1.0F);
             p.teleport(p.getWorld().getSpawnLocation());
+            isInvincible = true;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    isInvincible = false;
+                    Bukkit.getPlayer(uuid).sendMessage(Util.getPrefix() + "You are no longer protected!");
+                }
+            }.runTaskLater(Oneiron.getInstance(), 20*8);
 
             int i = 0;
             for(ItemStack itemStack : p.getInventory().getContents()) {
@@ -300,5 +310,14 @@ public class OneironPlayer {
 
     public static ArrayList<UUID> getPlayerRegenerating() {
         return playerRegenerating;
+    }
+
+
+    public void setInvincible(boolean invincible) {
+        isInvincible = invincible;
+    }
+
+    public boolean isInvincible() {
+        return isInvincible;
     }
 }

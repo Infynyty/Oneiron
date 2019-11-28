@@ -22,7 +22,7 @@ public class AttackManager {
     private static final Attack HEAL_LV_1 = new Heal(0, 0, 10, "Weak healing", Particle.FIREWORKS_SPARK, Races.MAGE);
 
     //Rage
-    private static final Attack RAGE_LV_1 = new Rage(2.0D, 4, 20, "Rage", null, Races.WARRIOR);
+    private static final Attack RAGE_LV_1 = new Rage(2.0D, 4, 10, "Rage", null, Races.WARRIOR);
 
     public static Attack getExplosionLv1() {
         return EXPLOSION_LV_1;

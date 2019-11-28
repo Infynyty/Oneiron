@@ -55,8 +55,8 @@ public class ComboManager implements Listener {
             e.getPlayer().sendMessage(Util.getDebug() + "Your race is wrong");
             return;
         }
-        if((oneironPlayer.getClasses().equals(Races.MAGE) || oneironPlayer.getClasses().equals(Races.WARRIOR))
-                && e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
+        //if((oneironPlayer.getClasses().equals(Races.MAGE) || oneironPlayer.getClasses().equals(Races.WARRIOR))
+          //      && e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
 
         //Prevents a player from not being in the Hashmap
         comboPoints.putIfAbsent(e.getPlayer().getUniqueId(), 1);

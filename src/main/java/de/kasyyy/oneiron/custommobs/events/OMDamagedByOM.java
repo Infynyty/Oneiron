@@ -10,7 +10,7 @@ public class OMDamagedByOM implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
-        if(!(e.getDamager().hasMetadata(Util.ID) && e.getEntity().hasMetadata(Util.ID))) return;
+        if(!(e.getDamager().hasMetadata(Util.ID)) && (!(e.getEntity().hasMetadata(Util.ID)))) return;
 
         OneironMob damaged = OneironMob.getOneironMobs().get(e.getDamager().getMetadata(Util.ID).get(0).asInt());
         OneironMob attacker = OneironMob.getOneironMobs().get(e.getDamager().getMetadata(Util.ID).get(0).asInt());

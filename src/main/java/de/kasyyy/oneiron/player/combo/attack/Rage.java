@@ -12,6 +12,7 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Rage extends Attack {
@@ -22,18 +23,28 @@ public class Rage extends Attack {
 
     @Override
     protected void attack(Player p) {
-        for(Entity entity : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), range, range, range)) {
-            if(!(entity instanceof LivingEntity)) return;
-            if(!(entity.hasMetadata(Util.ID))) return;
-            OneironMob oneironMob = OneironMob.getOneironMobs().get(entity.getMetadata(Util.getDebug()).get(0).asInt());
-            p.sendMessage(Util.getDebug() + "Event registered");
+        p.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, p.getLocation(), 1);
+        for (Entity entity : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), range, range, range)) {
+            if(entity.equals(p)) continue;
+            if (!(entity instanceof LivingEntity)) continue;
 
-            entity.setVelocity(new Vector(entity.getVelocity().getBlockX(), 3, entity.getVelocity().getBlockZ()));
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Oneiron.getInstance(), () -> {
-                entity.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, entity.getLocation(),1);
-                oneironMob.damageEntity((int)(OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent), p);
-            }, 20);
+            if (!(entity.hasMetadata(Util.ID))) continue;
+            OneironMob oneironMob = OneironMob.getOneironMobs().get(entity.getMetadata(Util.ID).get(0).asInt());
+
+
+            entity.setVelocity(new Vector(entity.getVelocity().getX(), 1.5, entity.getVelocity().getZ()));
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+
+                    entity.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, entity.getLocation(), 1);
+                    //TODO: Nullpointer ex
+                    oneironMob.damageEntity((int) (OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent), p);
+                }
+            }.runTaskLater(Oneiron.getInstance(), 20);
+
+
         }
-
     }
 }

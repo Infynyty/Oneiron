@@ -1,5 +1,6 @@
 package de.kasyyy.oneiron.main;
 
+import de.kasyyy.oneiron.custommobs.CMDcspawn;
 import de.kasyyy.oneiron.custommobs.MobRegistry;
 import de.kasyyy.oneiron.custommobs.OneironMobManager;
 import de.kasyyy.oneiron.custommobs.events.OMDamagedByOM;
@@ -54,6 +55,7 @@ public class Oneiron extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new OMDamagedByOM(), this);
 
         this.getCommand("cspawner").setExecutor(new CMDcspawner());
+        this.getCommand("cspawn").setExecutor(new CMDcspawn());
         this.getCommand("oneironitems").setExecutor(new CMDoneironItems());
         this.getCommand("setrace").setExecutor(new CMDSetRace());
         this.getCommand("lvlreset").setExecutor(new CMDLevelReset());
@@ -118,7 +120,7 @@ public class Oneiron extends JavaPlugin {
         Spawner.setAmount(this.getConfig().getInt("Spawner.Amount"));
 
         if(this.getConfig().getInt("Spawner.Amount") != 0) {
-            for(int i = 0; i <= Spawner.getAmount(); i++) {
+            for(int i = 1; i <= Spawner.getAmount(); i++) {
                 Spawner.reloadSpawner(i);
                 logger.log(Level.INFO, "Oneiron spawner has been created!");
                 Bukkit.broadcastMessage(Util.getDebug() + "A spawner has been cerated!");
