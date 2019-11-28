@@ -230,13 +230,16 @@ public class OneironPlayer {
     public void setRace(Races race) {
         switch (race) {
             case MAGE:
-                attack1 = AttackManager.getExplosionLv1();
+                attack1 = AttackManager.getRageLv1();
                 attack2 = AttackManager.getLightningLv1();
                 attack3 = AttackManager.getHealLv1();
                 attack4 = AttackManager.getSlamLv1();
                 break;
             case ARCHER:
                 attack1 = AttackManager.getSlamLv1();
+                break;
+            case WARRIOR:
+                //TODO: add functionality
                 break;
             case NONE:
                 break;

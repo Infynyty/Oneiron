@@ -9,5 +9,8 @@
         <module name="Oneiron" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Oneiron" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

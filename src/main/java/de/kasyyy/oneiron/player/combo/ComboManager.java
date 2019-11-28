@@ -4,6 +4,7 @@ import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.JoinEvent;
 import de.kasyyy.oneiron.player.OneironPlayer;
+import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.DelayedTask;
 import org.bukkit.entity.Player;
@@ -48,13 +49,14 @@ public class ComboManager implements Listener {
             return;
         }
         if(!(OneironWeapon.getRaceSpecificList()).containsKey(OneironWeapon.getOWFromIS().get(e.getPlayer().getItemInHand()))) {
-            e.getPlayer().sendMessage(Util.getDebug() + "This weapon doesnt exist");
             return;
         }
         if(!(oneironPlayer.getClasses() == OneironWeapon.getRaceSpecificList().get(OneironWeapon.getOWFromIS().get(e.getPlayer().getItemInHand())))) {
             e.getPlayer().sendMessage(Util.getDebug() + "Your race is wrong");
             return;
         }
+        if((oneironPlayer.getClasses().equals(Races.MAGE) || oneironPlayer.getClasses().equals(Races.WARRIOR))
+                && e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
 
         //Prevents a player from not being in the Hashmap
         comboPoints.putIfAbsent(e.getPlayer().getUniqueId(), 1);
@@ -81,6 +83,7 @@ public class ComboManager implements Listener {
                     comboPoints.put(p.getUniqueId(), comboPoints.get(p.getUniqueId()) + 2);
                     break;
                 }
+
 
 
             case 3:
