@@ -7,6 +7,8 @@ import de.kasyyy.oneiron.custommobs.events.OMDamagedByOM;
 import de.kasyyy.oneiron.custommobs.events.OneironMobDeathEvent;
 import de.kasyyy.oneiron.custommobs.events.SlimeSplitEvent;
 import de.kasyyy.oneiron.custommobs.spawner.CMDcspawner;
+import de.kasyyy.oneiron.custommobs.spawner.CMDspawnerdebug;
+import de.kasyyy.oneiron.custommobs.spawner.DebugBlockBreakEvent;
 import de.kasyyy.oneiron.custommobs.spawner.Spawner;
 import de.kasyyy.oneiron.items.CMDoneironItems;
 import de.kasyyy.oneiron.items.weapons.WeaponManager;
@@ -55,14 +57,17 @@ public class Oneiron extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new PlayerRegenerationEvent(), this);
         this.getServer().getPluginManager().registerEvents(new SlimeSplitEvent(), this);
         this.getServer().getPluginManager().registerEvents(new OMDamagedByOM(), this);
+        this.getServer().getPluginManager().registerEvents(new DebugBlockBreakEvent(), this);
 
         this.getCommand("cspawner").setExecutor(new CMDcspawner());
         this.getCommand("cspawn").setExecutor(new CMDcspawn());
         this.getCommand("oneironitems").setExecutor(new CMDoneironItems());
         this.getCommand("setrace").setExecutor(new CMDSetRace());
         this.getCommand("lvlreset").setExecutor(new CMDLevelReset());
+        this.getCommand("spawnerdebug").setExecutor(new CMDspawnerdebug());
         setupConfig();
         setUpSQL();
+        Spawner.reloadSpawner();
         WeaponManager.loadWeapons();
         OneironMobManager.loadOneironMobs();
 
@@ -95,6 +100,8 @@ public class Oneiron extends JavaPlugin {
                 }
             }
         }
+        if(CMDspawnerdebug.isDebug()) CMDspawnerdebug.setDebugBlocks();
+
         //Saves all oneiron players during a reload
         for(Player p : Bukkit.getOnlinePlayers()) {
             if (JoinEvent.getAllOneironPlayers().containsKey(p.getUniqueId())) {
@@ -124,15 +131,9 @@ public class Oneiron extends JavaPlugin {
             this.getConfig().addDefault("Level." + i, 100 + 2*i);
         }
         saveConfig();
-        Spawner.setAmount(this.getConfig().getInt("Spawner.Amount"));
 
-        if(this.getConfig().getInt("Spawner.Amount") != 0) {
-            for(int i = 1; i <= Spawner.getAmount(); i++) {
-                Spawner.reloadSpawner(i);
-                logger.log(Level.INFO, "Oneiron spawner has been created!");
-                Bukkit.broadcastMessage(Util.getDebug() + "A spawner has been cerated!");
-            }
-        }
+
+
         logger.log(Level.INFO, "Config has been set up");
     }
 
@@ -164,6 +165,12 @@ public class Oneiron extends JavaPlugin {
                     "maxMana SMALLINT, " +
                     "level SMALLINT, " +
                     "xp INT)");
+            createTable.executeUpdate("CREATE TABLE IF NOT EXISTS OneironSpawner (" +
+                    "world VARCHAR(20), " +
+                    "x INT, " +
+                    "y INT, " +
+                    "z INT, " +
+                    "entity VARCHAR(60))");
             logger.log(Level.INFO, "Connected to Database");
         } catch (SQLException e) {
             e.printStackTrace();

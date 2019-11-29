@@ -10,7 +10,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class Spawner {
 
@@ -19,13 +24,25 @@ public class Spawner {
 
     public Spawner(Location location, EntityTypes entity) {
         amount++;
-        instance.getConfig().set("Spawner." + amount + ".World", location.getWorld().getName());
+        try(Connection connection = Oneiron.getInstance().getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(
+                "INSERT INTO OneironSpawner VALUES (?, ?, ?, ?, ?)"
+        )) {
+            preparedStatement.setString(1, location.getWorld().getName());
+            preparedStatement.setInt(2, location.getBlockX());
+            preparedStatement.setInt(3, location.getBlockY());
+            preparedStatement.setInt(4, location.getBlockZ());
+            preparedStatement.setString(5, MobRegistry.getAllEntities().inverse().get(entity));
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        /*instance.getConfig().set("Spawner." + amount + ".World", location.getWorld().getName());
         instance.getConfig().set("Spawner." + amount + ".X", location.getX());
         instance.getConfig().set("Spawner." + amount + ".Y", location.getY());
         instance.getConfig().set("Spawner." + amount + ".Z", location.getZ());
         instance.getConfig().set("Spawner." + amount + ".Mob", MobRegistry.getAllEntities().inverse().get(entity));
         instance.getConfig().set("Spawner.Amount", amount);
-        instance.saveConfig();
+        instance.saveConfig();*/
         spawnMobs(location, entity);
 
     }
@@ -72,16 +89,34 @@ public class Spawner {
 
     /**
      * Reloads all spawners from the config file
-     * @param i The integer to iterate over
      */
-    public static void reloadSpawner(int i) {
-        Location location = new Location(Bukkit.getWorld(Oneiron.getInstance().getConfig().getString("Spawner." + i + ".World")),
+    public static void reloadSpawner() {
+        try(Connection connection = Oneiron.getInstance().getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT * FROM OneironSpawner"
+        )) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(!resultSet.next()) return;
+            do {
+                String world = resultSet.getString("world");
+                int x = resultSet.getInt("x");
+                int y = resultSet.getInt("y");
+                int z = resultSet.getInt("z");
+                EntityTypes entity = MobRegistry.getAllEntities().get(resultSet.getString("entity"));
+                Location location = new Location(Bukkit.getWorld(world), x, y, z);
+                spawnMobs(location, entity);
+                Oneiron.getInstance().getLogger().log(Level.INFO, "Reloaded a spawner");
+            } while (resultSet.next());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        /*Location location = new Location(Bukkit.getWorld(Oneiron.getInstance().getConfig().getString("Spawner." + i + ".World")),
                 Oneiron.getInstance().getConfig().getDouble("Spawner." + i + ".X"),
                 Oneiron.getInstance().getConfig().getDouble("Spawner." + i + ".Y"),
                 Oneiron.getInstance().getConfig().getDouble("Spawner." + i + ".Z"));
         EntityTypes entity = MobRegistry.getAllEntities().get(Oneiron.getInstance().getConfig().getString("Spawner." + i + ".Mob"));
         spawnMobs(location, entity);
-        Bukkit.getConsoleSender().sendMessage(Util.getDebug() + entity.a(((CraftWorld) location.getWorld()).getHandle()).getCustomName().g().getString());
+        Bukkit.getConsoleSender().sendMessage(Util.getDebug() + entity.a(((CraftWorld) location.getWorld()).getHandle()).getCustomName().g().getString());*/
     }
 
 
