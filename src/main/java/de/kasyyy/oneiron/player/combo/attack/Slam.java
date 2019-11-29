@@ -2,6 +2,8 @@ package de.kasyyy.oneiron.player.combo.attack;
 
 import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
+import de.kasyyy.oneiron.player.JoinEvent;
+import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.runnables.SlamDamage;
 import org.bukkit.Particle;
@@ -24,6 +26,8 @@ public class Slam extends Attack {
         vector.setY(0);
         p.setVelocity(vector);
 
+        OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(p.getUniqueId());
+        oneironPlayer.setInvincible(true);
         new SlamDamage(p,(int) Math.round(OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent),
                 particle).runTaskTimer(Oneiron.getInstance(), 0, 2);
         p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_CAT_HISS, 5.0F, 5.0F);

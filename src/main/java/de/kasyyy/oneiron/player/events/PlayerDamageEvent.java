@@ -21,11 +21,8 @@ public class PlayerDamageEvent implements Listener {
             e.setDamage(0);
             OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getEntity().getUniqueId());
             OneironMob oneironMob = OneironMob.getOneironMobs().get(e.getDamager().getMetadata(Util.ID).get(0).asInt());
-
-            float percent = (float) oneironPlayer.getHealth() / (float) oneironPlayer.getMaxHealth();
+            if(oneironPlayer.isInvincible()) e.setCancelled(true);
             oneironPlayer.damage(oneironMob.getDamage());
-
-
 
         }
     }
