@@ -17,11 +17,13 @@ import de.kasyyy.oneiron.player.combo.attack.Attack;
 import de.kasyyy.oneiron.player.events.*;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,6 +62,7 @@ public class Oneiron extends JavaPlugin {
         this.getCommand("setrace").setExecutor(new CMDSetRace());
         this.getCommand("lvlreset").setExecutor(new CMDLevelReset());
         setupConfig();
+        setUpSQL();
         WeaponManager.loadWeapons();
         OneironMobManager.loadOneironMobs();
 
@@ -113,6 +116,10 @@ public class Oneiron extends JavaPlugin {
     private void setupConfig() {
         this.getConfig().options().copyDefaults(true);
         this.getConfig().addDefault("Spawner.Amount", 0);
+        this.getConfig().addDefault("SQL.IP", 0);
+        this.getConfig().addDefault("SQL.User", null);
+        this.getConfig().addDefault("SQL.Password", null);
+        this.getConfig().addDefault("SQL.Port", null);
         for(int i = 0; i < 20; i++) {
             this.getConfig().addDefault("Level." + i, 100 + 2*i);
         }
@@ -125,6 +132,41 @@ public class Oneiron extends JavaPlugin {
                 logger.log(Level.INFO, "Oneiron spawner has been created!");
                 Bukkit.broadcastMessage(Util.getDebug() + "A spawner has been cerated!");
             }
+        }
+        logger.log(Level.INFO, "Config has been set up");
+    }
+
+    //TODO: Create DB if it doesn't exist
+    public Connection getConnection() throws SQLException {
+        if(this.getConfig().getString("SQL.IP") == null ||
+            this.getConfig().getString("SQL.Port") == null ||
+            this.getConfig().getString("SQL.User") == null) {
+            this.logger.log(Level.SEVERE, "No SQL connection defined, stopping plugin!");
+            Bukkit.getServer().getConsoleSender().sendMessage(Util.getPrefix() + ChatColor.RED + "No SQL connection defined, stopping plugin!");
+            this.getServer().getPluginManager().disablePlugin(this);
+            return null;
+        }
+        String url = "jdbc:mysql://" + this.getConfig().getString("SQL.IP") + ":" +
+                this.getConfig().getString("SQL.Port") + "/Oneiron?useSSL=false";
+        String user = this.getConfig().getString("SQL.User");
+        String password = this.getConfig().getString("SQL.Password");
+        Connection connection = DriverManager.getConnection(url, user, password);
+        return connection;
+    }
+
+    public void setUpSQL() {
+        try(Connection connection = getConnection(); Statement createTable = connection.createStatement()) {
+            createTable.executeUpdate("" +
+                    "CREATE TABLE IF NOT EXISTS OneironPlayer " +
+                    "(class VARCHAR(20), " +
+                    "uuid VARCHAR(36), " +
+                    "maxHealth SMALLINT, " +
+                    "maxMana SMALLINT, " +
+                    "level SMALLINT, " +
+                    "xp INT)");
+            logger.log(Level.INFO, "Connected to Database");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
