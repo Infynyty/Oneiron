@@ -17,6 +17,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -33,6 +37,25 @@ public class OneironPlayer {
 
 
     public OneironPlayer(String name, UUID uuid, int level, int health, int mana, int xp, Races race) {
+        try(Connection connection = instance.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(
+                "INSERT INTO OneironPlayer VALUES (" +
+                        "?, " +
+                        "?, " +
+                        "?, " +
+                        "?, " +
+                        "?, " +
+                        "?)"
+        )) {
+            preparedStatement.setString(1, race.toString());
+            preparedStatement.setString(2, uuid.toString());
+            preparedStatement.setInt(3, maxHealth);
+            preparedStatement.setInt(4, maxMana);
+            preparedStatement.setInt(5, level);
+            preparedStatement.setInt(6, xp);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         this.name = name;
         this.uuid = uuid;
         this.level = level;
@@ -49,12 +72,33 @@ public class OneironPlayer {
     public OneironPlayer (UUID uuid) {
         if(instance.getConfig().contains(uuid.toString())) {
             this.uuid = uuid;
-            this.race = Races.valueOf(instance.getConfig().getString(uuid.toString() + ".Class"));
+            this.name = null;
+            /*this.race = Races.valueOf(instance.getConfig().getString(uuid.toString() + ".Class"));
             this.maxHealth = instance.getConfig().getInt(uuid.toString() + ".Health");
             this.level = instance.getConfig().getInt(uuid.toString() + ".Level");
             this.maxMana = instance.getConfig().getInt(uuid.toString() + ".Mana");
             this.xp = instance.getConfig().getInt(uuid.toString() + ".XP");
-            this.name = instance.getConfig().getString(uuid.toString() + ".Name");
+            this.name = instance.getConfig().getString(uuid.toString() + ".Name");*/
+
+            try(Connection connection = instance.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("" +
+                    "SELECT * FROM oneironPlayer WHERE uuid = ?")) {
+
+                preparedStatement.setString(1, uuid.toString());
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if(!resultSet.next()) throw new NullPointerException("No player with this UUID");
+
+                do {
+                    this.race = Races.valueOf(resultSet.getString("race"));
+                    this.maxHealth = resultSet.getInt("maxHealth");
+                    this.level = resultSet.getInt("level");
+                    this.xp = resultSet.getInt("xp");
+                    this.maxMana = resultSet.getInt("maxMana");
+                } while(resultSet.next());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             this.health = this.maxHealth;
             this.mana = this.maxMana;
             setRace(race);
@@ -66,13 +110,31 @@ public class OneironPlayer {
 
 
     public void saveToConfig(){
-        instance.getConfig().set(uuid.toString() + ".Class", race.toString());
+        try(Connection connection = instance.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE OneironPlayer SET " +
+                        "race = ?, " +
+                        "level = ?, " +
+                        "maxHealth = ?, " +
+                        "maxMana = ?, " +
+                        "xp = ? WHERE uuid = ?"
+        )) {
+            preparedStatement.setString(1, race.toString());
+            preparedStatement.setInt(2, level);
+            preparedStatement.setInt(3, maxHealth);
+            preparedStatement.setInt(4, maxMana);
+            preparedStatement.setInt(5, xp);
+            preparedStatement.setString(6, uuid.toString());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        /*instance.getConfig().set(uuid.toString() + ".Class", race.toString());
         instance.getConfig().set(uuid.toString() + ".Health", maxHealth);
         instance.getConfig().set(uuid.toString() + ".Level", level);
         instance.getConfig().set(uuid.toString() + ".Mana", maxMana);
         instance.getConfig().set(uuid.toString() + ".XP", xp);
         instance.getConfig().set(uuid.toString() + ".Name", name);
-        instance.saveConfig();
+        instance.saveConfig();*/
     }
 
     //TODO: remove safeConfig

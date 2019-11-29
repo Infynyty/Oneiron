@@ -147,7 +147,7 @@ public class Oneiron extends JavaPlugin {
             return null;
         }
         String url = "jdbc:mysql://" + this.getConfig().getString("SQL.IP") + ":" +
-                this.getConfig().getString("SQL.Port") + "/Oneiron?useSSL=false";
+                this.getConfig().getString("SQL.Port") + "/Oneiron?useSSL=false&allowPublicKeyRetrieval=true";
         String user = this.getConfig().getString("SQL.User");
         String password = this.getConfig().getString("SQL.Password");
         Connection connection = DriverManager.getConnection(url, user, password);
@@ -158,7 +158,7 @@ public class Oneiron extends JavaPlugin {
         try(Connection connection = getConnection(); Statement createTable = connection.createStatement()) {
             createTable.executeUpdate("" +
                     "CREATE TABLE IF NOT EXISTS OneironPlayer " +
-                    "(class VARCHAR(20), " +
+                    "(race VARCHAR(20), " +
                     "uuid VARCHAR(36), " +
                     "maxHealth SMALLINT, " +
                     "maxMana SMALLINT, " +
