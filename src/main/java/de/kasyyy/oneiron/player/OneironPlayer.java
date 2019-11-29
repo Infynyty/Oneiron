@@ -312,7 +312,6 @@ public class OneironPlayer {
         return playerRegenerating;
     }
 
-
     public void setInvincible(boolean invincible) {
         isInvincible = invincible;
     }
