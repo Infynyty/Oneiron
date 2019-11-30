@@ -25,7 +25,7 @@ public class SpawnEntity extends BukkitRunnable {
     @Override
     public void run() {
         for(Location location : locations) {
-            if((location.getWorld().getNearbyEntities(location, 30, 30, 30, x -> x instanceof LivingEntity).size() < 15)
+            if((location.getWorld().getNearbyEntities(location, 30, 30, 30, x -> x instanceof LivingEntity).size() < 8)
                     && location.getWorld().getNearbyEntities(location, 30, 30, 30, x -> x instanceof Player).size() > 0) {
                 MobRegistry.spawnEntity(entity, location);
             }

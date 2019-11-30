@@ -12,7 +12,6 @@ public class PlayerRegenerationEvent implements Listener {
     @EventHandler
     public void onPlayerRegen(EntityRegainHealthEvent e) {
         if(!(e.getEntity() instanceof Player)) return;
-        Bukkit.getConsoleSender().sendMessage(Util.getDebug() + "Cancelled Regeneration");
         e.setCancelled(true);
     }
 }

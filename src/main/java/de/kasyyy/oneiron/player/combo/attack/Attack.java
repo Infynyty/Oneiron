@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Attack {
-    double damagePercent;
-    int range;
-    int manaCost;
-    String name;
-    Particle particle;
-    Effect effect;
-    Races races;
-    private final int MANA_REGENERATION = 5;
+    protected double damagePercent;
+    protected int range;
+    protected int manaCost;
+    protected String name;
+    protected Particle particle;
+    protected Effect effect;
+    protected Races races;
+    private final int MANA_REGENERATION = 10;
 
     private static ArrayList<UUID> playerRegenerating = new ArrayList<>();
 
@@ -70,7 +70,7 @@ public abstract class Attack {
 
         //Checks if the task is already running
         if(!playerRegenerating.contains(oneironPlayer.getUuid())) {
-            new ManaRegeneration(oneironPlayer, MANA_REGENERATION, playerRegenerating).runTaskTimer(Oneiron.getInstance(), 20*3, 10);
+            new ManaRegeneration(oneironPlayer, MANA_REGENERATION, playerRegenerating).runTaskTimer(Oneiron.getInstance(), 20*3, 20);
         }
     }
 

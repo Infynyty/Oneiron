@@ -1,8 +1,9 @@
-package de.kasyyy.oneiron.player.combo.attack;
+package de.kasyyy.oneiron.player.combo.attack.mage;
 
 import de.kasyyy.oneiron.player.JoinEvent;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.player.Races;
+import de.kasyyy.oneiron.player.combo.attack.Attack;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 

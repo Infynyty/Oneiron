@@ -16,6 +16,7 @@ public final class Util {
 
     public final static String ID = "ID";
     public final static String SELL = "SELL";
+    public final static String INVULNERABLE = "INVULNERABLE";
 
     private Util() {}
 

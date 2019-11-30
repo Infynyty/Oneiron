@@ -30,7 +30,7 @@ public class OneironPlayer {
     private int level, maxHealth, maxMana, xp, health, mana;
     private boolean isInvincible = false;
     private Races race;
-    private Attack attack1, attack2, attack3, attack4;
+    private Attack basicAttack, attack1, attack2, attack3, attack4;
     private static ArrayList<UUID> playerRegenerating = new ArrayList<>();
 
     private Oneiron instance = Oneiron.getInstance();
@@ -70,15 +70,8 @@ public class OneironPlayer {
     }
 
     public OneironPlayer (UUID uuid) {
-        if(instance.getConfig().contains(uuid.toString())) {
             this.uuid = uuid;
             this.name = null;
-            /*this.race = Races.valueOf(instance.getConfig().getString(uuid.toString() + ".Class"));
-            this.maxHealth = instance.getConfig().getInt(uuid.toString() + ".Health");
-            this.level = instance.getConfig().getInt(uuid.toString() + ".Level");
-            this.maxMana = instance.getConfig().getInt(uuid.toString() + ".Mana");
-            this.xp = instance.getConfig().getInt(uuid.toString() + ".XP");
-            this.name = instance.getConfig().getString(uuid.toString() + ".Name");*/
 
             try(Connection connection = instance.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("" +
                     "SELECT * FROM oneironPlayer WHERE uuid = ?")) {
@@ -102,9 +95,6 @@ public class OneironPlayer {
             this.health = this.maxHealth;
             this.mana = this.maxMana;
             setRace(race);
-        } else {
-            throw new NullPointerException("No player with this UUID");
-        }
     }
 
 
@@ -128,16 +118,7 @@ public class OneironPlayer {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        /*instance.getConfig().set(uuid.toString() + ".Class", race.toString());
-        instance.getConfig().set(uuid.toString() + ".Health", maxHealth);
-        instance.getConfig().set(uuid.toString() + ".Level", level);
-        instance.getConfig().set(uuid.toString() + ".Mana", maxMana);
-        instance.getConfig().set(uuid.toString() + ".XP", xp);
-        instance.getConfig().set(uuid.toString() + ".Name", name);
-        instance.saveConfig();*/
     }
-
-    //TODO: remove safeConfig
 
     /**
      * Use this method to damage an Oneiron player
@@ -267,7 +248,7 @@ public class OneironPlayer {
             path = "Level." + level;
             saveToConfig();
             levelUp();
-            Bukkit.getPlayer(uuid).sendMessage(Util.getPrefix() + "You levelled up! Your new level is: " + level);
+            Bukkit.getPlayer(uuid).sendMessage(Util.getPrefix() + "You leveled up! Your new level is: " + level);
         }
     }
 
@@ -281,27 +262,24 @@ public class OneironPlayer {
 
     public void setLevel(int level) {
         this.level = level;
-        instance.saveConfig();
     }
 
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
-        instance.saveConfig();
     }
 
     public void setMaxMana(int maxMana) {
         this.maxMana = maxMana;
-        instance.saveConfig();
     }
 
     public void setXp(int xp) {
         this.xp = xp;
-        instance.saveConfig();
     }
 
     public void setRace(Races race) {
         switch (race) {
             case MAGE:
+                basicAttack = AttackManager.getFLAME();
                 attack1 = AttackManager.getRageLv1();
                 attack2 = AttackManager.getLightningLv1();
                 attack3 = AttackManager.getHealLv1();
@@ -380,5 +358,9 @@ public class OneironPlayer {
 
     public boolean isInvincible() {
         return isInvincible;
+    }
+
+    public Attack getBasicAttack() {
+        return basicAttack;
     }
 }

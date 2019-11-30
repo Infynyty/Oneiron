@@ -34,7 +34,6 @@ public class ManaRegeneration extends BukkitRunnable {
             float percent = (float) oneironPlayer.getMana() / (float) oneironPlayer.getMaxMana();
 
             if (oneironPlayer.getMana() + addedMana >= oneironPlayer.getMaxMana()) {
-                player.sendMessage(Util.getDebug() + "Percent: " + percent);
                 player.setFoodLevel(20);
                 oneironPlayer.addMana(addedMana);
                 playerRegenerating.remove(oneironPlayer.getUuid());

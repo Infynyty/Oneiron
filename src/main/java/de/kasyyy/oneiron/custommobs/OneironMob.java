@@ -25,7 +25,6 @@ public class OneironMob extends OneironMobTemplate{
 
     public OneironMob(OneironMobTemplate oneironMobTemplate, LivingEntity entity) {
         super(oneironMobTemplate.name, oneironMobTemplate.health, oneironMobTemplate.level, oneironMobTemplate.damage, oneironMobTemplate.drops, oneironMobTemplate.xp);
-        //TODO: might cause bugs
         this.xp = oneironMobTemplate.xp;
         this.drops = oneironMobTemplate.drops;
         this.damage = oneironMobTemplate.damage;
@@ -41,11 +40,11 @@ public class OneironMob extends OneironMobTemplate{
 
 
     public void damageEntity(int damageDealt, org.bukkit.entity.Entity damager) {
+        if(this.getEntity().hasMetadata(Util.INVULNERABLE)) return;
         if(this.health - damageDealt > 0) {
             this.health -= damageDealt;
             this.entity.setCustomName(this.name + ChatColor.AQUA +  " [" + this.health + "/" + maxHealth + "]");
             this.entity.damage(0);
-            damager.sendMessage(Util.getDebug() + "Damage was: " + damageDealt + "; health was: " + this.health);
         } else {
             this.entity.setHealth(0);
             oneironMobs.remove(id);

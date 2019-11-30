@@ -43,8 +43,7 @@ public class Rage extends Attack {
                 public void run() {
 
                     entity.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, entity.getLocation(), 1);
-                    //TODO: Nullpointer ex
-                    oneironMob.damageEntity(damage, p);
+                    if(oneironMob != null) oneironMob.damageEntity(damage, p);
                 }
             }.runTaskLater(Oneiron.getInstance(), 20);
 

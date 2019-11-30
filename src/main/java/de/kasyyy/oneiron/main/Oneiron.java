@@ -76,6 +76,7 @@ public class Oneiron extends JavaPlugin {
         OneironMobManager.loadOneironMobs();
 
         //Creates an Oneiron player after a reload
+        //TODO: Add sql support
         for(Player p : Bukkit.getOnlinePlayers()) {
             OneironPlayer oneironPlayer = null;
             if(instance.getConfig().contains(p.getUniqueId().toString())) {
@@ -104,6 +105,7 @@ public class Oneiron extends JavaPlugin {
                 }
             }
         }
+        //Disables debug mode if the server is reloaded
         if(CMDspawnerdebug.isDebug()) CMDspawnerdebug.setDebugBlocks();
 
         //Saves all oneiron players during a reload
@@ -126,7 +128,6 @@ public class Oneiron extends JavaPlugin {
 
     private void setupConfig() {
         this.getConfig().options().copyDefaults(true);
-        this.getConfig().addDefault("Spawner.Amount", 0);
         this.getConfig().addDefault("SQL.IP", 0);
         this.getConfig().addDefault("SQL.User", null);
         this.getConfig().addDefault("SQL.Password", null);
@@ -135,13 +136,11 @@ public class Oneiron extends JavaPlugin {
             this.getConfig().addDefault("Level." + i, 100 + 2*i);
         }
         saveConfig();
-
-
-
         logger.log(Level.INFO, "Config has been set up");
     }
 
     //TODO: Create DB if it doesn't exist
+    //Creates a connection to a mysql database, if all data has been entered into the config
     public Connection getConnection() throws SQLException {
         if(this.getConfig().getString("SQL.IP") == null ||
             this.getConfig().getString("SQL.Port") == null ||
@@ -159,6 +158,7 @@ public class Oneiron extends JavaPlugin {
         return connection;
     }
 
+    //Creates tables for the players and the spawners
     public void setUpSQL() {
         try(Connection connection = getConnection(); Statement createTable = connection.createStatement()) {
             createTable.executeUpdate("" +

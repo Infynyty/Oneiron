@@ -44,6 +44,8 @@ public class ComboManager implements Listener {
         OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
         Player p = e.getPlayer();
 
+        if(coolDown.contains(p.getUniqueId())) return;
+
         if(!(JoinEvent.getAllOneironPlayers().containsKey(p.getUniqueId()))) {
             p.kickPlayer(Util.getErrReload());
             return;
@@ -55,19 +57,20 @@ public class ComboManager implements Listener {
             e.getPlayer().sendMessage(Util.getDebug() + "Your race is wrong");
             return;
         }
-        //if((oneironPlayer.getClasses().equals(Races.MAGE) || oneironPlayer.getClasses().equals(Races.WARRIOR))
-          //      && e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
 
         //Prevents a player from not being in the Hashmap
         comboPoints.putIfAbsent(e.getPlayer().getUniqueId(), 1);
 
-
-        if(!(JoinEvent.getAllOneironPlayers().containsKey(p.getUniqueId()))) {
-            p.kickPlayer(Util.getErrReload());
-            return;
+        if((e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && comboPoints.get(p.getUniqueId()) == 1) {
+            switch (oneironPlayer.getClasses()) {
+                case MAGE:
+                case WARRIOR:
+                    oneironPlayer.getBasicAttack().attackUsed(oneironPlayer);
+                    return;
+            }
         }
 
-        if(coolDown.contains(p.getUniqueId())) return;
+
         coolDown.add(p.getUniqueId());
 
         switch (comboPoints.get(p.getUniqueId())) {
@@ -127,7 +130,7 @@ public class ComboManager implements Listener {
             instance.getServer().getScheduler().cancelTask(cancelTask.getTaskId());
             cancelTask = null;
         }
-        //If the task is not cancelled within 3 seconds the player's combo score is set to 0 again
+        //If the task is not cancelled within 1.5 seconds the player's combo score is set to 0 again
         //so that the player does not stay in the combo for ever
 
         cancelTask = new DelayedTask(p, comboPoints).runTaskTimer(instance, 0, 30);

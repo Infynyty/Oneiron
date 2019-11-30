@@ -1,11 +1,18 @@
 package de.kasyyy.oneiron.player.combo.attack;
 
 import de.kasyyy.oneiron.player.Races;
+import de.kasyyy.oneiron.player.combo.attack.mage.BasicFlame;
+import de.kasyyy.oneiron.player.combo.attack.mage.Heal;
+import de.kasyyy.oneiron.player.combo.attack.mage.Lightning;
+import de.kasyyy.oneiron.player.combo.attack.mage.Slam;
 import org.bukkit.Particle;
 
 public class AttackManager {
 
     private AttackManager() {}
+
+    //Flame
+    private static final Attack FLAME = new BasicFlame(1.0D, 0, 0, "Basic Flame", null, Races.MAGE);
 
     //Explosions
     private static final Attack EXPLOSION_LV_1 = new Explosion(2.0D, 20, 10, "Weak Explosion", Particle.EXPLOSION_NORMAL, Races.MAGE);
@@ -50,5 +57,9 @@ public class AttackManager {
 
     public static Attack getRageLv1() {
         return RAGE_LV_1;
+    }
+
+    public static Attack getFLAME() {
+        return FLAME;
     }
 }

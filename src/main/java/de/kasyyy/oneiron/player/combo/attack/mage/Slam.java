@@ -1,10 +1,11 @@
-package de.kasyyy.oneiron.player.combo.attack;
+package de.kasyyy.oneiron.player.combo.attack.mage;
 
 import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.JoinEvent;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.player.Races;
+import de.kasyyy.oneiron.player.combo.attack.Attack;
 import de.kasyyy.oneiron.util.runnables.SlamDamage;
 import org.bukkit.Particle;
 import org.bukkit.Sound;

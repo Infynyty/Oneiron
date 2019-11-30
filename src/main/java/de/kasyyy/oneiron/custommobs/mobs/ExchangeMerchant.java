@@ -16,6 +16,7 @@ public class ExchangeMerchant extends EntityVillagerTrader {
         this.setCustomName(new ChatMessage(NAME));
         this.setCustomNameVisible(true);
         this.getBukkitEntity().setMetadata(Util.SELL, new FixedMetadataValue(Oneiron.getInstance(), OneironCurrency.EXCHANGE_NAME));
+        this.getBukkitEntity().setMetadata(Util.INVULNERABLE, new FixedMetadataValue(Oneiron.getInstance(), ""));
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0);
     }
 
