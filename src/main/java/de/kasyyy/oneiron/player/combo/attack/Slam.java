@@ -21,6 +21,7 @@ public class Slam extends Attack {
     @Override
     public void attack(Player p) {
 
+        int damage = (int) Math.round(OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent);
         Vector vector = p.getLocation().getDirection();
         vector.multiply(3.5F);
         vector.setY(0);
@@ -28,8 +29,7 @@ public class Slam extends Attack {
 
         OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(p.getUniqueId());
         oneironPlayer.setInvincible(true);
-        new SlamDamage(p,(int) Math.round(OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent),
-                particle).runTaskTimer(Oneiron.getInstance(), 0, 2);
+        new SlamDamage(p, damage, particle).runTaskTimer(Oneiron.getInstance(), 0, 2);
         p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_CAT_HISS, 5.0F, 5.0F);
     }
 }

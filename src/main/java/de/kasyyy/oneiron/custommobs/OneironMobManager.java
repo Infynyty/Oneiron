@@ -1,5 +1,6 @@
 package de.kasyyy.oneiron.custommobs;
 
+import de.kasyyy.oneiron.custommobs.mobs.ExchangeMerchant;
 import de.kasyyy.oneiron.custommobs.mobs.ForestSpider;
 import de.kasyyy.oneiron.custommobs.mobs.WeakSlime;
 import de.kasyyy.oneiron.custommobs.mobs.WeakZombie;
@@ -19,6 +20,7 @@ public class OneironMobManager {
         OneironMobTemplate testMob = new OneironMobTemplate(WeakZombie.WEAK_ZOMBIE_NAME, 20, 10, 10, basicDrops, 5);
         OneironMobTemplate weakSlime = new OneironMobTemplate(WeakSlime.name, 100, 100, 20, basicDrops, 10);
         OneironMobTemplate forestSpider = new OneironMobTemplate(ForestSpider.NAME, 1000, 100, 50, basicDrops, 15);
+        OneironMobTemplate exchangeMerchant = new OneironMobTemplate(ExchangeMerchant.NAME, 1000, 10, 0, null, 0);
     }
 
 

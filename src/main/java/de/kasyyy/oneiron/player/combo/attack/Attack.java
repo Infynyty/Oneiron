@@ -47,6 +47,7 @@ public abstract class Attack {
     /**
      * Override this method to implement custom logic
      * Do not use this to call an attack
+     * Always get the attack damage before starting a scheduler
      * @param p Player who uses the attack
      */
     protected abstract void attack(Player p);

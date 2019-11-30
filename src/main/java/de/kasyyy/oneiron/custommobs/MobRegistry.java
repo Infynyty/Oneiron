@@ -3,6 +3,7 @@ package de.kasyyy.oneiron.custommobs;
 import com.google.common.collect.HashBiMap;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
+import de.kasyyy.oneiron.custommobs.mobs.ExchangeMerchant;
 import de.kasyyy.oneiron.custommobs.mobs.ForestSpider;
 import de.kasyyy.oneiron.custommobs.mobs.WeakSlime;
 import de.kasyyy.oneiron.custommobs.mobs.WeakZombie;
@@ -77,9 +78,18 @@ public class MobRegistry {
 
         String spiderExtends = "spider";
         injectNewEntity(FOREST_SPIDER_NAME, spiderExtends);
-        EntityTypes.a<EntitySlime> forestSpider = EntityTypes.a.a(ForestSpider::new, EnumCreatureType.MONSTER);
+        EntityTypes.a<EntitySpider> forestSpider = EntityTypes.a.a(ForestSpider::new, EnumCreatureType.MONSTER);
         FOREST_SPIDER = IRegistry.a(IRegistry.ENTITY_TYPE, spiderExtends, forestSpider.a(spiderExtends));
         allEntities.put(FOREST_SPIDER_NAME, FOREST_SPIDER);
+
+        EntityTypes EXCHANGE_MERCHANT;
+        final String EXCHANGE_MERCHANT_NAME = "ExchangeMerchant";
+        String villagerExtends = "villager";
+
+        injectNewEntity(EXCHANGE_MERCHANT_NAME, spiderExtends);
+        EntityTypes.a<EntityVillagerTrader> exchangeMerchant = EntityTypes.a.a(ExchangeMerchant::new, EnumCreatureType.CREATURE);
+        EXCHANGE_MERCHANT = IRegistry.a(IRegistry.ENTITY_TYPE, villagerExtends, exchangeMerchant.a(villagerExtends));
+        allEntities.put(EXCHANGE_MERCHANT_NAME, EXCHANGE_MERCHANT);
     }
 
     public static HashBiMap<String, EntityTypes> getAllEntities() {

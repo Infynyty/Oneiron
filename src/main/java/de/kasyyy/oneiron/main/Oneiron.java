@@ -11,6 +11,8 @@ import de.kasyyy.oneiron.custommobs.spawner.CMDspawnerdebug;
 import de.kasyyy.oneiron.custommobs.spawner.DebugBlockBreakEvent;
 import de.kasyyy.oneiron.custommobs.spawner.Spawner;
 import de.kasyyy.oneiron.items.CMDoneironItems;
+import de.kasyyy.oneiron.items.ExchangeEvent;
+import de.kasyyy.oneiron.items.MerchantClickEvent;
 import de.kasyyy.oneiron.items.weapons.WeaponManager;
 import de.kasyyy.oneiron.player.*;
 import de.kasyyy.oneiron.player.combo.AddRemovePlayerFromCPEvent;
@@ -58,6 +60,8 @@ public class Oneiron extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new SlimeSplitEvent(), this);
         this.getServer().getPluginManager().registerEvents(new OMDamagedByOM(), this);
         this.getServer().getPluginManager().registerEvents(new DebugBlockBreakEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new MerchantClickEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new ExchangeEvent(), this);
 
         this.getCommand("cspawner").setExecutor(new CMDcspawner());
         this.getCommand("cspawn").setExecutor(new CMDcspawn());

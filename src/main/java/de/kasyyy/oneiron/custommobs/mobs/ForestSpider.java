@@ -11,6 +11,7 @@ public class ForestSpider extends EntitySpider {
         this.setCustomName(new ChatMessage(NAME));
         this.setCustomNameVisible(true);
 
-        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, WeakZombie.class, false));
+        this.targetSelector.a(4, new PathfinderGoalNearestAttackableTarget<>(this, WeakZombie.class, false));
+        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, false));
     }
 }

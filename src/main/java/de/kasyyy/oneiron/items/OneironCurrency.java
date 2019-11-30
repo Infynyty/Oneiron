@@ -11,11 +11,14 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class OneironCurrency extends OneironItem {
     public OneironCurrency(int value, Races race, boolean dropable, boolean sellable, ItemStack itemStack, int dropChance) {
         super(value, race, dropable, sellable, itemStack, dropChance);
     }
+
+    private static HashMap<String, Inventory> oneironInventories = new HashMap();
 
     private static ArrayList<String> loreScrew = new ArrayList<String>(Arrays.asList("Old", "Rusty"));
     private static ItemStack screw = Util.crItem(Material.GOLD_NUGGET, 1, ChatColor.DARK_GRAY + "Screw", loreScrew);
@@ -33,11 +36,28 @@ public class OneironCurrency extends OneironItem {
 
     private static ItemStack mtToSc = Util.crItem(Material.GOLD_NUGGET, 1, "ScrapMetal to Screw", null);
 
-    private static Inventory exchangeInv = Bukkit.createInventory(null, 9, "Exchange");
+    public final static String EXCHANGE_NAME = "Exchange";
+    private static Inventory exchangeInv = Bukkit.createInventory(null, 9, EXCHANGE_NAME);
 
+    static {
+        oneironInventories.putIfAbsent(EXCHANGE_NAME, exchangeInv);
+    }
     public static void openExchangeInv(Player p) {
         exchangeInv.setItem(0, scToMt);
         exchangeInv.setItem(1 ,mtToSc);
         p.openInventory(exchangeInv);
+
+    }
+
+    public static HashMap<String, Inventory> getOneironInventories() {
+        return oneironInventories;
+    }
+
+    public static Inventory getExchangeInv() {
+        return exchangeInv;
+    }
+
+    public static ItemStack getScToMt() {
+        return scToMt;
     }
 }

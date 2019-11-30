@@ -15,6 +15,7 @@ public final class Util {
     private final static String ERR_RELOAD = PREFIX + ChatColor.RED + "Using </rl> will cause errors using this plugin";
 
     public final static String ID = "ID";
+    public final static String SELL = "SELL";
 
     private Util() {}
 

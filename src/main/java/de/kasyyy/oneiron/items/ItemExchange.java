@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemExchange {
-    public void exchangeItems(Player p, ItemStack price, int priceAmount, ItemStack reward, int rewardAmount) {
+    public static void exchangeItems(Player p, ItemStack price, int priceAmount, ItemStack reward, int rewardAmount) {
         reward.setAmount(rewardAmount);
         int amount = 0;
         for (ItemStack item : p.getInventory().getContents()) {

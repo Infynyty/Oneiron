@@ -9,6 +9,7 @@ import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -24,11 +25,14 @@ public class Rage extends Attack {
     @Override
     protected void attack(Player p) {
         p.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, p.getLocation(), 1);
+        p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
         for (Entity entity : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), range, range, range)) {
             if(entity.equals(p)) continue;
             if (!(entity instanceof LivingEntity)) continue;
 
             if (!(entity.hasMetadata(Util.ID))) continue;
+            //If the player changes the weapon before the runnable has run, a NullpointerEx occurs
+            final int damage = (int) (OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent);
             OneironMob oneironMob = OneironMob.getOneironMobs().get(entity.getMetadata(Util.ID).get(0).asInt());
 
 
@@ -40,7 +44,7 @@ public class Rage extends Attack {
 
                     entity.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, entity.getLocation(), 1);
                     //TODO: Nullpointer ex
-                    oneironMob.damageEntity((int) (OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent), p);
+                    oneironMob.damageEntity(damage, p);
                 }
             }.runTaskLater(Oneiron.getInstance(), 20);
 

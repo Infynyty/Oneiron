@@ -14,6 +14,7 @@ public class OMDamagedByOM implements Listener {
 
         OneironMob damaged = OneironMob.getOneironMobs().get(e.getDamager().getMetadata(Util.ID).get(0).asInt());
         OneironMob attacker = OneironMob.getOneironMobs().get(e.getDamager().getMetadata(Util.ID).get(0).asInt());
+        if(damaged.getName().equalsIgnoreCase(attacker.getName())) return;
         damaged.damageEntity(attacker.getDamage(), attacker.getEntity());
     }
 }
