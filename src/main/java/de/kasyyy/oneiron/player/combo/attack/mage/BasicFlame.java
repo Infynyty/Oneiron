@@ -28,7 +28,7 @@ public class BasicFlame extends Attack {
         ignored.add(Material.GRASS);
         ignored.add(Material.AIR);
         ignored.add(Material.WATER);
-        Location location = p.getTargetBlock(ignored, range).getLocation();
+        Location location = p.getTargetBlock(ignored, 5).getLocation();
 
         //Checks the players line of sight in a radius of range to find out if an entity is targeted
         for (Block block : p.getLineOfSight(ignored, 5)) {

@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemExchange {
     public static void exchangeItems(Player p, ItemStack price, int priceAmount, ItemStack reward, int rewardAmount) {
+        int rewardOriginal = reward.getAmount();
         reward.setAmount(rewardAmount);
         int amount = 0;
         for (ItemStack item : p.getInventory().getContents()) {
@@ -24,6 +25,7 @@ public class ItemExchange {
                 if (left == 0) {
                     //If all needed items are removed the player gets the reward
                     p.getInventory().addItem(reward);
+                    reward.setAmount(rewardOriginal);
                     break;
                 }
                 if (itemStack == null) continue;

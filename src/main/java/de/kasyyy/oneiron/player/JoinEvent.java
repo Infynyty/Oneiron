@@ -44,7 +44,7 @@ public class JoinEvent implements Listener {
                 p.sendMessage(Util.getDebug() + "Succesfully loaded player from config");
 
             } else {
-                oneironPlayer = new OneironPlayer(p.getName(), p.getUniqueId(), 1, 20, 50, 1, Races.NONE);
+                oneironPlayer = new OneironPlayer(p.getName(), p.getUniqueId(), 1, 100, 50, 1, Races.NONE);
                 p.sendMessage(Util.getDebug() + "Successfully created new player");
                 oneironPlayer.saveToConfig();
 
