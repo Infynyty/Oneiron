@@ -41,7 +41,7 @@ public class ComboManager implements Listener {
     @EventHandler
     public void onClick(PlayerInteractEvent e) {
 
-        OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
+
         Player p = e.getPlayer();
 
         if(coolDown.contains(p.getUniqueId())) return;
@@ -53,6 +53,7 @@ public class ComboManager implements Listener {
         if(!(OneironWeapon.getRaceSpecificList()).containsKey(OneironWeapon.getOWFromIS().get(e.getPlayer().getItemInHand()))) {
             return;
         }
+        OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
         if(!(oneironPlayer.getClasses() == OneironWeapon.getRaceSpecificList().get(OneironWeapon.getOWFromIS().get(e.getPlayer().getItemInHand())))) {
             e.getPlayer().sendMessage(Util.getDebug() + "Your race is wrong");
             return;
@@ -66,6 +67,12 @@ public class ComboManager implements Listener {
                 case MAGE:
                 case WARRIOR:
                     oneironPlayer.getBasicAttack().attackUsed(oneironPlayer);
+                    instance.getServer().getScheduler().scheduleSyncDelayedTask(instance, new Runnable() {
+                        @Override
+                        public void run() {
+                            coolDown.remove(p.getUniqueId());
+                        }
+                    }, 5);
                     return;
             }
         }

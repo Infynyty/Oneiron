@@ -6,11 +6,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.util.Objects;
+
 public class ExchangeEvent implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        if(!e.getClickedInventory().equals(OneironCurrency.getExchangeInv())) return;
+        if(!Objects.equals(e.getClickedInventory(), OneironCurrency.getExchangeInv())) return;
         e.setCancelled(true);
         if(e.getCurrentItem().equals(OneironCurrency.getMtToSc())) {
             ItemExchange.exchangeItems((Player) e.getWhoClicked(), OneironCurrency.SCRAP_METAL.getItemStack(), 1,

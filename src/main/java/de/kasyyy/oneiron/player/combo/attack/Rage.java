@@ -35,16 +35,16 @@ public class Rage extends Attack {
         p.getLocation().getWorld().getNearbyEntities(p.getLocation(), range, range, range).stream().filter(x -> x.hasMetadata(Util.ID)).forEach(entity -> allEntities.add(entity));
 
         for(Entity entity : allEntities) {
+            //If the player changes the weapon before the runnable has run, a NullpointerEx occurs
+            final int damage = (int) (OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent);
+            entity.setVelocity(new Vector(entity.getVelocity().getX(), 1.5, entity.getVelocity().getZ()));
+            OneironMob oneironMob = OneironMob.getOneironMobs().get(entity.getMetadata(Util.ID).get(0).asInt());
             new BukkitRunnable() {
 
                 @Override
                 public void run() {
-                    //If the player changes the weapon before the runnable has run, a NullpointerEx occurs
-                    final int damage = (int) (OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent);
 
 
-                    entity.setVelocity(new Vector(entity.getVelocity().getX(), 1.5, entity.getVelocity().getZ()));
-                    OneironMob oneironMob = OneironMob.getOneironMobs().get(entity.getMetadata(Util.ID).get(0).asInt());
                     entity.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, entity.getLocation(), 1);
                     if(oneironMob != null) oneironMob.damageEntity(damage, p);
                 }

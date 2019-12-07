@@ -83,7 +83,7 @@ public class MobRegistry {
         allEntities.put(FOREST_SPIDER_NAME, FOREST_SPIDER);
 
         EntityTypes EXCHANGE_MERCHANT;
-        final String EXCHANGE_MERCHANT_NAME = "ExchangeMerchant";
+        final String EXCHANGE_MERCHANT_NAME = "Merchant";
         String villagerExtends = "villager";
 
         injectNewEntity(EXCHANGE_MERCHANT_NAME, spiderExtends);

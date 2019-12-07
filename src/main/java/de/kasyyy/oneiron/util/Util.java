@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 public final class Util {
-    private final static String PREFIX = ChatColor.AQUA + "[Oneiron]:  ";
+    private final static String PREFIX = ChatColor.AQUA + "[Oneiron]: ";
     private final static String DEBUG = ChatColor.RED + "[Debug]" + PREFIX;
     private final static String ERR_RELOAD = PREFIX + ChatColor.RED + "Using </rl> will cause errors using this plugin";
 

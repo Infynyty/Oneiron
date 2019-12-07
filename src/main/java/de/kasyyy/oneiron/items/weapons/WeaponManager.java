@@ -11,14 +11,15 @@ import java.util.ArrayList;
 
 public class WeaponManager {
 
-    public static OneironItem weakStaff;
-    public static OneironWeapon greatStaff;
-    public static OneironItem birchWoodStaff;
-    public static OneironItem shepherdsStaff;
-    private WeaponManager() {}
+    private static WeaponManager weaponManager = null;
 
-    public static void loadWeapons() {
+    private final OneironItem weakStaff;
+    private final OneironWeapon greatStaff;
+    private final OneironItem birchWoodStaff;
+    private final OneironItem shepherdsStaff;
 
+
+    private WeaponManager() {
         weakStaff = new OneironWeapon(10, Races.MAGE, true, true,
                 Util.crItem(Material.STICK, 1, ChatColor.GRAY + "Weak Staff",
                         new ArrayList<String>() {{
@@ -32,7 +33,8 @@ public class WeaponManager {
         shepherdsStaff = new OneironWeapon(50, Races.MAGE, true, true,
                 Util.crItem(Material.STICK, 1, ChatColor.YELLOW + "Shepherd's Staff",
                         new ArrayList<String>() {{
-                            add(ChatColor.DARK_PURPLE + "Seems like it was used by a shepherd"); add(ChatColor.DARK_PURPLE + "a long time ago");
+                            add(ChatColor.DARK_PURPLE + "Seems like it was used by a shepherd");
+                            add(ChatColor.DARK_PURPLE + "a long time ago");
                         }}), 20, 50);
         greatStaff = new OneironWeapon(10, Races.MAGE, true, true,
                 Util.crItem(Material.BLAZE_ROD, 1, ChatColor.DARK_AQUA + "Great Staff",
@@ -42,4 +44,29 @@ public class WeaponManager {
         Bukkit.getConsoleSender().sendMessage(Util.getPrefix() + "Loaded all Oneiron weapons");
     }
 
+    public static WeaponManager getInstance() {
+        if(weaponManager == null) {
+            return new WeaponManager();
+        } else {
+            return weaponManager;
+        }
+//        return weaponManager == null ? weaponManager = new WeaponManager() : weaponManager;
+
+    }
+
+    public OneironItem getWeakStaff() {
+        return weakStaff;
+    }
+
+    public OneironWeapon getGreatStaff() {
+        return greatStaff;
+    }
+
+    public OneironItem getBirchWoodStaff() {
+        return birchWoodStaff;
+    }
+
+    public OneironItem getShepherdsStaff() {
+        return shepherdsStaff;
+    }
 }
