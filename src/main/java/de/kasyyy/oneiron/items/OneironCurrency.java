@@ -26,7 +26,7 @@ public class OneironCurrency extends OneironItem {
 
     private static ArrayList<String> loreScrapMetal = new ArrayList<String>(Arrays.asList("Old", "Rusty"));
     private static ItemStack scrapMetal = Util.crItem(Material.IRON_INGOT, 1, ChatColor.GRAY + "Scrap Metal", loreScrapMetal);
-    public final static OneironCurrency SCRAP_METAL = new OneironCurrency(64, Races.NONE, true, true, scrapMetal, 25);
+    public final static OneironCurrency SCRAP_METAL = new OneironCurrency(64, Races.NONE, true, true, scrapMetal, 205);
 
     private static ItemStack scToMt = Util.crItem(Material.IRON_INGOT, 1, "Screw to ScrapMetal", null);
 

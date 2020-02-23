@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class OneironMobManager {
 
-    private static ArrayList<OneironItem> basicDrops = new ArrayList<OneironItem>(){{add(OneironCurrency.SCREW); add(OneironCurrency.SCRAP_METAL); add(WeaponManager.birchWoodStaff);}};
-    private static ArrayList<OneironItem> advancedDrops = new ArrayList<OneironItem>(){{addAll(basicDrops); add(WeaponManager.shepherdsStaff); add(WeaponManager.greatStaff);}};
+    private static ArrayList<OneironItem> basicDrops = new ArrayList<OneironItem>(){{add(OneironCurrency.SCREW); add(OneironCurrency.SCRAP_METAL); add(WeaponManager.getInstance().getShepherdsStaff());}};
+    private static ArrayList<OneironItem> advancedDrops = new ArrayList<OneironItem>(){{addAll(basicDrops); add(WeaponManager.getInstance().getShepherdsStaff()); add(WeaponManager.getInstance().getGreatStaff());}};
 
     public static void loadOneironMobs() {
         //Create a template mob without id and entity here

@@ -143,6 +143,7 @@ public class OneironPlayer {
                 @Override
                 public void run() {
                     isInvincible = false;
+                    if(Bukkit.getPlayer(uuid) == null) cancel();
                     Bukkit.getPlayer(uuid).sendMessage(Util.getPrefix() + "You are no longer protected!");
                 }
             }.runTaskLater(Oneiron.getInstance(), 20*8);

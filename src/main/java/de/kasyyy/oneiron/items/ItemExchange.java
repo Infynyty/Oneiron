@@ -1,5 +1,6 @@
 package de.kasyyy.oneiron.items;
 
+import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -55,6 +56,68 @@ public class ItemExchange {
 
         } else {
             p.sendMessage(Util.getPrefix() + "Don't screw around!");
+        }
+    }
+    public static int getMoney(Player p) {
+        int amount = 0;
+        for (ItemStack item : p.getInventory().getContents()) {
+            if (item == null) continue;
+            if (item.isSimilar(OneironCurrency.SCREW.getItemStack())) {
+                amount += item.getAmount();
+                continue;
+            }
+            if(item.isSimilar(OneironCurrency.SCRAP_METAL.getItemStack())) {
+                amount = amount + item.getAmount() * 64;
+            }
+        }
+        p.sendMessage(Util.getDebug() + "You have " + amount  + " screws");
+        return amount;
+    }
+    public static void buyItem(Player p, ItemStack toBuy, int prize) {
+        p.sendMessage(Util.getDebug() + "Prize is " + prize + " , you have " + getMoney(p));
+        if(getMoney(p) < prize) return;
+
+        for(ItemStack itemStack : p.getInventory().getContents()) {
+            if(prize <= 0) {
+                p.sendMessage(Util.getDebug() + "Added bought item");
+                p.getInventory().addItem(toBuy);
+                if(prize < 0) {
+                    p.sendMessage(Util.getDebug() + "You payed too much");
+                    while(prize < 0) {
+                        p.getInventory().addItem(OneironCurrency.SCREW.getItemStack());
+                        prize++;
+                    }
+                }
+                break;
+            }
+            if(itemStack == null) continue;
+            if(itemStack.isSimilar(OneironCurrency.SCREW.getItemStack())) {
+                p.sendMessage(Util.getDebug() + "Itemstack similar to screw");
+                if (prize - itemStack.getAmount() > 0) {
+                    prize -= itemStack.getAmount();
+                    itemStack.setAmount(0);
+                    continue;
+                } else {
+                    while (prize >= 0) {
+                        itemStack.setAmount(itemStack.getAmount() - 1);
+                        prize--;
+                    }
+                }
+            }
+            if(itemStack.isSimilar(OneironCurrency.SCRAP_METAL.getItemStack())) {
+                p.sendMessage(Util.getDebug() + "Itemstack similar to scrap metal");
+                if(prize - itemStack.getAmount() > 0) {
+                    prize -= itemStack.getAmount() * 64;
+                    itemStack.setAmount(0);
+                    continue;
+                } else {
+                    while(prize >= 0) {
+                        itemStack.setAmount(itemStack.getAmount()- 1);
+                        prize -= 64;
+                    }
+
+                }
+            }
         }
     }
 }

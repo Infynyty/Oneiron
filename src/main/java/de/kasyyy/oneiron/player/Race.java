@@ -48,7 +48,7 @@ public class Race implements Listener {
             else if(e.getCurrentItem().equals(mage)) {
                 oneironPlayer.setRace(Races.MAGE);
                 oneironPlayer.addMana(oneironPlayer.getMaxMana());
-                Bukkit.getPlayer(oneironPlayer.getUuid()).getInventory().addItem(WeaponManager.weakStaff.getItemStack());
+                Bukkit.getPlayer(oneironPlayer.getUuid()).getInventory().addItem(WeaponManager.getInstance().getWeakStaff().getItemStack());
                 e.getWhoClicked().getOpenInventory().close();
             }
         }

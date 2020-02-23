@@ -38,6 +38,7 @@ public class Oneiron extends JavaPlugin {
     @Override
     public void onLoad() {
         MobRegistry.registerAllMobs();
+        WeaponManager weaponManager = WeaponManager.getInstance();
     }
 
     private Logger logger;
@@ -72,7 +73,7 @@ public class Oneiron extends JavaPlugin {
         setupConfig();
         setUpSQL();
         Spawner.reloadSpawner();
-        WeaponManager.loadWeapons();
+
         OneironMobManager.loadOneironMobs();
 
         //Creates an Oneiron player after a reload
@@ -94,6 +95,8 @@ public class Oneiron extends JavaPlugin {
         }
 
     }
+
+
 
     @Override
     public void onDisable() {
@@ -129,9 +132,9 @@ public class Oneiron extends JavaPlugin {
     private void setupConfig() {
         this.getConfig().options().copyDefaults(true);
         this.getConfig().addDefault("SQL.IP", 0);
-        this.getConfig().addDefault("SQL.User", null);
-        this.getConfig().addDefault("SQL.Password", null);
-        this.getConfig().addDefault("SQL.Port", null);
+        this.getConfig().addDefault("SQL.User", "null");
+        this.getConfig().addDefault("SQL.Password", "null");
+        this.getConfig().addDefault("SQL.Port", "null");
         for(int i = 0; i < 20; i++) {
             this.getConfig().addDefault("Level." + i, 100 + 2*i);
         }
@@ -150,12 +153,22 @@ public class Oneiron extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
             return null;
         }
-        String url = "jdbc:mysql://" + this.getConfig().getString("SQL.IP") + ":" +
-                this.getConfig().getString("SQL.Port") + "/Oneiron?useSSL=false&allowPublicKeyRetrieval=true";
-        String user = this.getConfig().getString("SQL.User");
-        String password = this.getConfig().getString("SQL.Password");
-        Connection connection = DriverManager.getConnection(url, user, password);
-        return connection;
+        try {
+            String url = "jdbc:mysql://" + this.getConfig().getString("SQL.IP") + ":" +
+                    this.getConfig().getString("SQL.Port") + "/?useSSL=false&allowPublicKeyRetrieval=true";
+            String user = this.getConfig().getString("SQL.User");
+            String password = this.getConfig().getString("SQL.Password");
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("CREATE DATABASE IF NOT EXISTS Oneiron");
+            connection.setCatalog("Oneiron");
+            return connection;
+        } catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage(Util.getPrefix() + ChatColor.RED + "Connection to database failed, stopping plugin!" +
+                    "\nPlease check your login data and confirm that the database is running");
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+        return null;
     }
 
     //Creates tables for the players and the spawners
