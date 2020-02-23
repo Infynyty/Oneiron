@@ -22,7 +22,7 @@ public class PlayerDamageEvent implements Listener {
             OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getEntity().getUniqueId());
             OneironMob oneironMob = OneironMob.getOneironMobs().get(e.getDamager().getMetadata(Util.ID).get(0).asInt());
             if(oneironPlayer.isInvincible()) e.setCancelled(true);
-            oneironPlayer.damage(oneironMob.getDamage());
+            oneironPlayer.damagePlayer(oneironMob.getDamage());
 
         }
     }

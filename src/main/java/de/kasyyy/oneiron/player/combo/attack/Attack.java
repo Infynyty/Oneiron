@@ -1,5 +1,6 @@
 package de.kasyyy.oneiron.player.combo.attack;
 
+import de.kasyyy.oneiron.custommobs.OneironMob;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.player.Races;
@@ -98,6 +99,10 @@ public abstract class Attack {
             new ManaRegeneration(oneironPlayer, MANA_REGENERATION,
                     playerRegenerating).runTaskTimer(Oneiron.getInstance(), MANA_DELAY, MANA_PERIOD);
         }
+    }
+
+    protected void attackOM(OneironPlayer oneironPlayer, OneironMob oneironMob) {
+        oneironMob.damageEntity((int) (oneironPlayer.getDamage() * damagePercent), Bukkit.getPlayer(oneironPlayer.getUuid()));
     }
 
     public static ArrayList<UUID> getPlayerRegenerating() {

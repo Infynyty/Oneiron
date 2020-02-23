@@ -1,6 +1,8 @@
 package de.kasyyy.oneiron.player;
 
 import de.kasyyy.oneiron.items.OneironCurrency;
+import de.kasyyy.oneiron.items.armor.OneironArmor;
+import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.combo.attack.Attack;
 import de.kasyyy.oneiron.player.combo.attack.AttackManager;
@@ -28,10 +30,12 @@ public class OneironPlayer {
     private final String name;
     private final UUID uuid;
     private int level, maxHealth, maxMana, xp, health, mana;
+    private int speed, damage, defense;
     private boolean isInvincible = false;
     private Races race;
     private Attack basicAttack, attack1, attack2, attack3, attack4;
     private static ArrayList<UUID> playerRegenerating = new ArrayList<>();
+    private OneironArmor[] armor = new OneironArmor[4];
 
     private Oneiron instance = Oneiron.getInstance();
 
@@ -66,6 +70,9 @@ public class OneironPlayer {
 
         this.health = this.maxHealth;
         this.mana = this.maxMana;
+        this.damage = 0;
+        this.speed = 1;
+        this.defense = 0;
         setRace(race);
     }
 
@@ -95,6 +102,9 @@ public class OneironPlayer {
             this.health = this.maxHealth;
             this.mana = this.maxMana;
             setRace(race);
+        this.damage = 0;
+        this.speed = 1;
+        this.defense = 0;
     }
 
 
@@ -125,7 +135,7 @@ public class OneironPlayer {
      *
      * @param damageAmount The damage dealt
      */
-    public void damage(int damageAmount) {
+    public void damagePlayer(int damageAmount) {
         if(isInvincible) return;
         int result = health - damageAmount;
         if(result <= 0) {
@@ -240,7 +250,6 @@ public class OneironPlayer {
         String path = "Level." + level;
         xp += xpAmount;
         saveToConfig();
-        Bukkit.getConsoleSender().sendMessage(Util.getDebug() + "Added xp");
 
         while(xp > instance.getConfig().getInt(path)) {
             if(level >= 20) break;
@@ -258,6 +267,11 @@ public class OneironPlayer {
         p.setLevel(level);
         p.getLocation().getWorld().spawnParticle(Particle.TOTEM, p.getLocation().add(0, 3, 0), 20);
         p.getLocation().getWorld().playSound(p.getLocation(), Sound.BLOCK_BELL_USE, 10.0F, 1.0F);
+    }
+
+    public int getDamage() {
+        Player player = Bukkit.getPlayer(uuid);
+        return Math.round(OneironWeapon.getOWFromIS().get(player.getItemInHand()).getDamage() + damage);
     }
 
 
@@ -363,5 +377,30 @@ public class OneironPlayer {
 
     public Attack getBasicAttack() {
         return basicAttack;
+    }
+
+    public void setDamage(int damage) {
+        Bukkit.broadcastMessage(Util.getDebug() + "Set damage to: " + damage);
+        this.damage = damage;
+    }
+
+    public OneironArmor[] getArmor() {
+        return armor;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
     }
 }

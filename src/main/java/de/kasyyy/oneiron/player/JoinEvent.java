@@ -1,5 +1,6 @@
 package de.kasyyy.oneiron.player;
 
+import de.kasyyy.oneiron.items.armor.OneironArmor;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.combo.attack.Attack;
 import de.kasyyy.oneiron.util.Util;
@@ -47,13 +48,15 @@ public final class JoinEvent implements Listener {
 
             if(resultSet.next()) {
                 oneironPlayer = new OneironPlayer(p.getUniqueId());
-                p.sendMessage(Util.getDebug() + "Succesfully loaded player from config");
+                p.sendMessage(Util.getDebug() + "Succesfully loaded player");
+                OneironArmor.changeArmor(oneironPlayer);
 
             } else {
                 oneironPlayer = new OneironPlayer(p.getName(), p.getUniqueId(), 1
                         , PLAYER_BASE_HEALTH, PLAYER_BASE_MANA, 1, Races.NONE);
                 p.sendMessage(Util.getDebug() + "Successfully created new player");
                 oneironPlayer.saveToConfig();
+                OneironArmor.changeArmor(oneironPlayer);
 
             }
 
@@ -62,7 +65,7 @@ public final class JoinEvent implements Listener {
         }
 
         if(oneironPlayer == null) {
-            Oneiron.getInstance().getLogger().log(Level.WARNING, "Unable to load player from config!");
+            Oneiron.getInstance().getLogger().log(Level.WARNING, "Unable to load player!");
             p.kickPlayer(Util.getPrefix() + ChatColor.RED + "An error occurred");
         }
 
@@ -81,6 +84,7 @@ public final class JoinEvent implements Listener {
     public void onLeave(final PlayerQuitEvent e) {
         if(allOneironPlayers.containsKey(e.getPlayer().getUniqueId())) {
             OneironPlayer oneironPlayer = allOneironPlayers.get(e.getPlayer().getUniqueId());
+            OneironArmor.removeArmor(oneironPlayer);
             oneironPlayer.saveToConfig();
             Bukkit.getConsoleSender().sendMessage(Util.getDebug() + "Saved Player to config");
             allOneironPlayers.remove(e.getPlayer().getUniqueId());

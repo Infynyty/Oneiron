@@ -1,6 +1,5 @@
 package de.kasyyy.oneiron.items;
 
-import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,19 +13,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class OneironCurrency extends OneironItem {
-    public OneironCurrency(int value, Races race, boolean dropable, boolean sellable, ItemStack itemStack, int dropChance) {
-        super(value, race, dropable, sellable, itemStack, dropChance);
+    private OneironCurrency(int value, ItemStack itemStack, int dropChance) {
+        super(value, itemStack, dropChance, Rarity.COMMON);
     }
 
-    private static HashMap<String, Inventory> oneironInventories = new HashMap();
+    private static HashMap<String, Inventory> oneironInventories = new HashMap<>();
 
     private static ArrayList<String> loreScrew = new ArrayList<String>(Arrays.asList("Old", "Rusty"));
     private static ItemStack screw = Util.crItem(Material.GOLD_NUGGET, 1, ChatColor.DARK_GRAY + "Screw", loreScrew);
-    public final static OneironCurrency SCREW = new OneironCurrency(1, Races.NONE, true, true, screw, 300);
+    public final static OneironItem SCREW = new OneironCurrency(1, screw, 300);
 
     private static ArrayList<String> loreScrapMetal = new ArrayList<String>(Arrays.asList("Old", "Rusty"));
     private static ItemStack scrapMetal = Util.crItem(Material.IRON_INGOT, 1, ChatColor.GRAY + "Scrap Metal", loreScrapMetal);
-    public final static OneironCurrency SCRAP_METAL = new OneironCurrency(64, Races.NONE, true, true, scrapMetal, 205);
+    public final static OneironItem SCRAP_METAL = new OneironCurrency(64, scrapMetal, 205);
 
     private static ItemStack scToMt = Util.crItem(Material.IRON_INGOT, 1, "Screw to ScrapMetal", null);
 

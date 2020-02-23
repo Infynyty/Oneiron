@@ -6,6 +6,7 @@ import de.kasyyy.oneiron.player.JoinEvent;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.DelayedTask;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,6 +47,7 @@ public final class ComboManager implements Listener {
         if(coolDown.contains(p.getUniqueId())) return;
 
         if(!(JoinEvent.getAllOneironPlayers().containsKey(p.getUniqueId()))) {
+            Bukkit.getConsoleSender().sendMessage(Util.getDebug() + "Not in list");
             p.kickPlayer(Util.getErrReload());
             return;
         }

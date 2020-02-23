@@ -4,19 +4,15 @@ import de.kasyyy.oneiron.custommobs.OneironMob;
 import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.JoinEvent;
-import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Rage extends Attack {
@@ -46,7 +42,8 @@ public class Rage extends Attack {
 
 
                     entity.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, entity.getLocation(), 1);
-                    if(oneironMob != null) oneironMob.damageEntity(damage, p);
+                    if (oneironMob != null)
+                        Rage.super.attackOM(JoinEvent.getAllOneironPlayers().get(p.getUniqueId()), oneironMob);
                 }
             }.runTaskLater(Oneiron.getInstance(), 20);
         }

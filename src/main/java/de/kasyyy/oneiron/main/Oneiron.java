@@ -3,6 +3,7 @@ package de.kasyyy.oneiron.main;
 import de.kasyyy.oneiron.custommobs.CMDcspawn;
 import de.kasyyy.oneiron.custommobs.MobRegistry;
 import de.kasyyy.oneiron.custommobs.OneironMobManager;
+import de.kasyyy.oneiron.custommobs.events.JockeySpawnEvent;
 import de.kasyyy.oneiron.custommobs.events.OMDamagedByOM;
 import de.kasyyy.oneiron.custommobs.events.OneironMobDeathEvent;
 import de.kasyyy.oneiron.custommobs.events.SlimeSplitEvent;
@@ -13,6 +14,8 @@ import de.kasyyy.oneiron.custommobs.spawner.Spawner;
 import de.kasyyy.oneiron.items.CMDoneironItems;
 import de.kasyyy.oneiron.items.ExchangeEvent;
 import de.kasyyy.oneiron.items.MerchantClickEvent;
+import de.kasyyy.oneiron.items.armor.ArmorManager;
+import de.kasyyy.oneiron.items.armor.OneironArmor;
 import de.kasyyy.oneiron.items.weapons.WeaponManager;
 import de.kasyyy.oneiron.player.*;
 import de.kasyyy.oneiron.player.combo.AddRemovePlayerFromCPEvent;
@@ -28,6 +31,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.*;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +42,8 @@ public class Oneiron extends JavaPlugin {
     @Override
     public void onLoad() {
         MobRegistry.registerAllMobs();
-        WeaponManager weaponManager = WeaponManager.getInstance();
+        WeaponManager.getInstance();
+        ArmorManager.getInstance();
     }
 
     private Logger logger;
@@ -63,6 +68,9 @@ public class Oneiron extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new DebugBlockBreakEvent(), this);
         this.getServer().getPluginManager().registerEvents(new MerchantClickEvent(), this);
         this.getServer().getPluginManager().registerEvents(new ExchangeEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerAttackEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new JockeySpawnEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new ChangeArmorEvent(), this);
 
         this.getCommand("cspawner").setExecutor(new CMDcspawner());
         this.getCommand("cspawn").setExecutor(new CMDcspawn());
@@ -78,21 +86,44 @@ public class Oneiron extends JavaPlugin {
 
         //Creates an Oneiron player after a reload
         //TODO: Add sql support
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            OneironPlayer oneironPlayer = null;
-            if(instance.getConfig().contains(p.getUniqueId().toString())) {
-                oneironPlayer = new OneironPlayer(p.getUniqueId());
-                p.sendMessage(Util.getDebug() + "Succesfully loaded player from config");
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT * FROM OneironPlayer WHERE uuid = ?"
+        )) {
+//            Array array = connection.createArrayOf("VARCHAR(36)", Bukkit.getOnlinePlayers().toArray());
+//            preparedStatement.setArray(1, array);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                preparedStatement.setString(1, p.getUniqueId().toString());
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    OneironPlayer oneironPlayer = new OneironPlayer(UUID.fromString(resultSet.getString("uuid")));
+                    Bukkit.getPlayer(UUID.fromString(resultSet.getString("uuid"))).sendMessage(Util.getDebug() + "Successfully loaded player!");
+                    JoinEvent.getAllOneironPlayers().put(oneironPlayer.getUuid(), oneironPlayer);
+                    OneironArmor.changeArmor(oneironPlayer);
+                    if (oneironPlayer.getClasses().equals(Races.NONE)) {
+                        Bukkit.getPlayer(UUID.fromString(resultSet.getString("uuid"))).sendMessage(Util.getDebug() + "Please choose a class!");
+                        Bukkit.getPlayer(UUID.fromString(resultSet.getString("uuid"))).openInventory(Race.getChooseInv());
+                    }
+                }
             }
-            if(oneironPlayer == null) {
-                p.kickPlayer(Util.getErrReload());
-            }
-            JoinEvent.getAllOneironPlayers().put(oneironPlayer.getUuid(), oneironPlayer);
-            if(oneironPlayer.getClasses().equals(Races.NONE)) {
-                p.sendMessage(Util.getDebug() + "Please choose a class!");
-                p.openInventory(Race.getChooseInv());
-            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+//        for(Player p : Bukkit.getOnlinePlayers()) {
+//            OneironPlayer oneironPlayer = null;
+//            if(instance.getConfig().contains(p.getUniqueId().toString())) {
+//                oneironPlayer = new OneironPlayer(p.getUniqueId());
+//                p.sendMessage(Util.getDebug() + "Succesfully loaded player from config");
+//            }
+//            if(oneironPlayer == null) {
+//                p.kickPlayer(Util.getErrReload());
+//            }
+//            JoinEvent.getAllOneironPlayers().put(oneironPlayer.getUuid(), oneironPlayer);
+//            if(oneironPlayer.getClasses().equals(Races.NONE)) {
+//                p.sendMessage(Util.getDebug() + "Please choose a class!");
+//                p.openInventory(Race.getChooseInv());
+//            }
+//        }
 
     }
 
@@ -115,6 +146,7 @@ public class Oneiron extends JavaPlugin {
         for(Player p : Bukkit.getOnlinePlayers()) {
             if (JoinEvent.getAllOneironPlayers().containsKey(p.getUniqueId())) {
                 OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(p.getUniqueId());
+                OneironArmor.removeArmor(oneironPlayer);
                 oneironPlayer.saveToConfig();
                 Bukkit.getConsoleSender().sendMessage(Util.getDebug() + "Saved Player to config");
                 JoinEvent.getAllOneironPlayers().remove(p.getUniqueId());
@@ -142,7 +174,6 @@ public class Oneiron extends JavaPlugin {
         logger.log(Level.INFO, "Config has been set up");
     }
 
-    //TODO: Create DB if it doesn't exist
     //Creates a connection to a mysql database, if all data has been entered into the config
     public Connection getConnection() throws SQLException {
         if(this.getConfig().getString("SQL.IP") == null ||

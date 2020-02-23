@@ -1,5 +1,6 @@
 package de.kasyyy.oneiron.player;
 
+import de.kasyyy.oneiron.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,9 +13,14 @@ public final class CMDSetRace implements CommandExecutor {
             if(!(commandSender instanceof Player)) return true;
             OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(((Player) commandSender).getUniqueId());
             if(strings.length == 1) {
-                if(strings[0].equalsIgnoreCase("none")) {
-                    oneironPlayer.setRace(Races.NONE);
+                try {
+                    Races races = Races.valueOf(strings[0]);
+                    oneironPlayer.setRace(races);
+                } catch (IllegalArgumentException ex) {
+                    commandSender.sendMessage(Util.getPrefix() + "This race doesn't exist!");
+                    return true;
                 }
+
             }
         }
         return true;

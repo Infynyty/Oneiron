@@ -6,13 +6,19 @@ import de.kasyyy.oneiron.custommobs.mobs.WeakSlime;
 import de.kasyyy.oneiron.custommobs.mobs.WeakZombie;
 import de.kasyyy.oneiron.items.OneironCurrency;
 import de.kasyyy.oneiron.items.OneironItem;
+import de.kasyyy.oneiron.items.armor.ArmorManager;
 import de.kasyyy.oneiron.items.weapons.WeaponManager;
 
 import java.util.ArrayList;
 
 public class OneironMobManager {
 
-    private static ArrayList<OneironItem> basicDrops = new ArrayList<OneironItem>(){{add(OneironCurrency.SCREW); add(OneironCurrency.SCRAP_METAL); add(WeaponManager.getInstance().getShepherdsStaff());}};
+    private static ArrayList<OneironItem> basicDrops = new ArrayList<OneironItem>() {{
+        add(OneironCurrency.SCREW);
+        add(OneironCurrency.SCRAP_METAL);
+        add(WeaponManager.getInstance().getShepherdsStaff());
+        add(ArmorManager.getInstance().leatherJacket);
+    }};
     private static ArrayList<OneironItem> advancedDrops = new ArrayList<OneironItem>(){{addAll(basicDrops); add(WeaponManager.getInstance().getShepherdsStaff()); add(WeaponManager.getInstance().getGreatStaff());}};
 
     public static void loadOneironMobs() {

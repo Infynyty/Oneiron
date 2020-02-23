@@ -1,7 +1,7 @@
 package de.kasyyy.oneiron.player.combo.attack;
 
 import de.kasyyy.oneiron.custommobs.OneironMob;
-import de.kasyyy.oneiron.items.weapons.OneironWeapon;
+import de.kasyyy.oneiron.player.JoinEvent;
 import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Location;
@@ -59,7 +59,7 @@ public class Explosion extends Attack {
         for(Entity entity: entities) {
             OneironMob oneironMob = OneironMob.getOneironMobs().get(entity.getMetadata(Util.ID).get(0).asInt());
             if(oneironMob != null) {
-                oneironMob.damageEntity((int) Math.round(OneironWeapon.getOWFromIS().get(p.getItemInHand()).getDamage() * damagePercent), p);
+                super.attackOM(JoinEvent.getAllOneironPlayers().get(p.getUniqueId()), oneironMob);
             }
 
 

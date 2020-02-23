@@ -1,22 +1,19 @@
 package de.kasyyy.oneiron.items;
 
-import de.kasyyy.oneiron.items.weapons.OneironWeapon;
-import de.kasyyy.oneiron.items.weapons.WeaponManager;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Objects;
 
 public class MerchantInventory {
     private Inventory inventory;
     private int slotCounter = 18;
 
-
+    /**
+     * Creates a custom merchant inventory
+     *
+     * @param name
+     */
     public MerchantInventory(String name) {
         inventory = Bukkit.createInventory(null, 9*5, name);
         for(int i = 0; i < 9; i++) {
@@ -24,6 +21,11 @@ public class MerchantInventory {
         }
     }
 
+    /**
+     * Adds items to the inventory
+     *
+     * @param addedItem
+     */
     public void addItem(OneironItem... addedItem) {
         for(OneironItem oneironItem : addedItem) {
             if(slotCounter > inventory.getSize()) return;
