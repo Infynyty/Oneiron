@@ -14,19 +14,32 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Attack {
-    protected double damagePercent;
-    protected int range;
-    protected int manaCost;
-    protected String name;
+    protected final double damagePercent;
+    protected final int range;
+    protected final int manaCost;
+    protected final String name;
     protected Particle particle;
     protected Effect effect;
-    protected Races races;
-    private final int MANA_REGENERATION = 10;
+    protected final Races races;
+    private static final int MANA_REGENERATION = 10;
+
+    private static final int MANA_DELAY = 20 * 3;
+    private static final int MANA_PERIOD = 20;
 
     private static ArrayList<UUID> playerRegenerating = new ArrayList<>();
 
-
-    public Attack(double damagePercent, int range, int manaCost, String name, Particle particle, Races races) {
+    /**
+     * To create a custom attack, extend this class and overwrite the
+     * {@link #attack(Player)} method.
+     *
+     * @param damagePercent The percentage of the damage of the weapon used, that will be dealt.
+     * @param range         If an attack has a specific range, it can be defined here.
+     * @param manaCost      The mana that will be used by this attack.
+     * @param name          The attacks name.
+     * @param particle      The particle used. This can be changed for higher levels of the same attack.
+     * @param races         The race which should be able to use this attack.
+     */
+    public Attack(double damagePercent, int range, int manaCost, String name, final Particle particle, Races races) {
         this.damagePercent = damagePercent;
         this.range = range;
         this.manaCost = manaCost;
@@ -35,7 +48,18 @@ public abstract class Attack {
         this.races = races;
     }
 
-    public Attack(double damagePercent, int range, int manaCost, String name, Effect effect, Races races) {
+    /**
+     * To create a custom attack, extend this class and overwrite the
+     * {@link #attack(Player)} method.
+     *
+     * @param damagePercent The percentage of the damage of the weapon used, that will be dealt.
+     * @param range         If an attack has a specific range, it can be defined here.
+     * @param manaCost      The mana that will be used by this attack.
+     * @param name          The attacks name.
+     * @param effect        The effect used. This can be changed for higher levels of the same attack.
+     * @param races         The race which should be able to use this attack.
+     */
+    public Attack(double damagePercent, int range, int manaCost, String name, final Effect effect, Races races) {
         this.damagePercent = damagePercent;
         this.range = range;
         this.manaCost = manaCost;
@@ -45,9 +69,9 @@ public abstract class Attack {
     }
 
     /**
-     * Override this method to implement custom logic
-     * Do not use this to call an attack
-     * Always get the attack damage before starting a scheduler
+     * Override this method to implement custom logic.
+     * Do not use this to call an attack.
+     * Always get the attack damage before starting a scheduler.
      * @param p Player who uses the attack
      */
     protected abstract void attack(Player p);
@@ -56,7 +80,7 @@ public abstract class Attack {
      * Use this method to call an attack
      * @param oneironPlayer The player using the attack
      */
-    public void attackUsed(OneironPlayer oneironPlayer) {
+    public void attackUsed(final OneironPlayer oneironPlayer) {
         Player player = Bukkit.getPlayer(oneironPlayer.getUuid());
         if(oneironPlayer.removeMana(manaCost)) {
             //Set hunger level
@@ -69,8 +93,10 @@ public abstract class Attack {
         }
 
         //Checks if the task is already running
-        if(!playerRegenerating.contains(oneironPlayer.getUuid())) {
-            new ManaRegeneration(oneironPlayer, MANA_REGENERATION, playerRegenerating).runTaskTimer(Oneiron.getInstance(), 20*3, 20);
+
+        if (!playerRegenerating.contains(oneironPlayer.getUuid())) {
+            new ManaRegeneration(oneironPlayer, MANA_REGENERATION,
+                    playerRegenerating).runTaskTimer(Oneiron.getInstance(), MANA_DELAY, MANA_PERIOD);
         }
     }
 

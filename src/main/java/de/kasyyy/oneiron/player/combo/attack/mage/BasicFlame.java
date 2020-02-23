@@ -16,22 +16,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BasicFlame extends Attack {
+public final class BasicFlame extends Attack {
+
+    /**
+     * The base attack for the mage class.
+     * {@inheritDoc}
+     */
     public BasicFlame(double damagePercent, int range, int manaCost, String name, Particle particle, Races races) {
         super(damagePercent, range, manaCost, name, particle, races);
     }
 
     @Override
-    protected void attack(Player p) {
+    protected void attack(final Player p) {
         Set<Material> ignored = new HashSet<>();
         ignored.add(Material.TALL_GRASS);
         ignored.add(Material.GRASS);
         ignored.add(Material.AIR);
         ignored.add(Material.WATER);
-        Location location = p.getTargetBlock(ignored, 5).getLocation();
+        Location location = p.getTargetBlock(ignored, range).getLocation();
 
         //Checks the players line of sight in a radius of range to find out if an entity is targeted
-        for (Block block : p.getLineOfSight(ignored, 5)) {
+        for (Block block : p.getLineOfSight(ignored, range)) {
             if (!(block.getType().equals(Material.AIR))) continue;
             if (!(block.getLocation().getWorld().getNearbyEntities(block.getLocation(), .5, .5, .5).isEmpty())) {
                 Collection<Entity> target = block.getLocation().getWorld().getNearbyEntities(block.getLocation(), .5, .5, .5);

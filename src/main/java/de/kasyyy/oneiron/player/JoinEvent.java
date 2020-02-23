@@ -1,6 +1,5 @@
 package de.kasyyy.oneiron.player;
 
-import com.mojang.datafixers.TypeRewriteRule;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.combo.attack.Attack;
 import de.kasyyy.oneiron.util.Util;
@@ -20,14 +19,21 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 
-public class JoinEvent implements Listener {
+public final class JoinEvent implements Listener {
     private Oneiron instance = Oneiron.getInstance();
     private static HashMap<UUID, OneironPlayer> allOneironPlayers = new HashMap<>();
+    private static final int PLAYER_BASE_HEALTH = 100;
+    private static final int PLAYER_BASE_MANA = 50;
 
-    //Tries to get the OneironPlayer from the config
-    //If the player is not found there a new one will be created
+    /**
+     * Tries to get the OneironPlayer from the config.
+     * If the player is not found there a new one will be created.
+     *
+     * @param e
+     */
+
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
+    public void onJoin(final PlayerJoinEvent e) {
         Player p = e.getPlayer();
         OneironPlayer oneironPlayer = null;
 
@@ -44,7 +50,8 @@ public class JoinEvent implements Listener {
                 p.sendMessage(Util.getDebug() + "Succesfully loaded player from config");
 
             } else {
-                oneironPlayer = new OneironPlayer(p.getName(), p.getUniqueId(), 1, 100, 50, 1, Races.NONE);
+                oneironPlayer = new OneironPlayer(p.getName(), p.getUniqueId(), 1
+                        , PLAYER_BASE_HEALTH, PLAYER_BASE_MANA, 1, Races.NONE);
                 p.sendMessage(Util.getDebug() + "Successfully created new player");
                 oneironPlayer.saveToConfig();
 
@@ -66,9 +73,12 @@ public class JoinEvent implements Listener {
         }
     }
 
-    //Removes the OnerionPlayer object
+    /**
+     * Removes the OnerionPlayer object.
+     * @param e
+     */
     @EventHandler
-    public void onLeave(PlayerQuitEvent e) {
+    public void onLeave(final PlayerQuitEvent e) {
         if(allOneironPlayers.containsKey(e.getPlayer().getUniqueId())) {
             OneironPlayer oneironPlayer = allOneironPlayers.get(e.getPlayer().getUniqueId());
             oneironPlayer.saveToConfig();

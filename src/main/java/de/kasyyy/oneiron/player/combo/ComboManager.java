@@ -4,7 +4,6 @@ import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
 import de.kasyyy.oneiron.player.JoinEvent;
 import de.kasyyy.oneiron.player.OneironPlayer;
-import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.DelayedTask;
 import org.bukkit.entity.Player;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class ComboManager implements Listener {
+public final class ComboManager implements Listener {
 
     private Oneiron instance = Oneiron.getInstance();
 

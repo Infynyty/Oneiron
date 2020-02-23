@@ -7,9 +7,11 @@ import de.kasyyy.oneiron.player.combo.attack.mage.Lightning;
 import de.kasyyy.oneiron.player.combo.attack.mage.Slam;
 import org.bukkit.Particle;
 
-public class AttackManager {
+public final class AttackManager {
 
-    private AttackManager() {}
+    private AttackManager() {
+
+    }
 
     //Flame
     private static final Attack FLAME = new BasicFlame(1.0D, 0, 0, "Basic Flame", null, Races.MAGE);
@@ -20,7 +22,7 @@ public class AttackManager {
     private static final Attack EXPLOSION_LV_3 = new Explosion(2.0D, 35, 15, "Huge Explosion", Particle.EXPLOSION_HUGE, Races.MAGE);
 
     //Slams
-    private static final Attack SLAM_LV_1 = new Slam(0.5D, 0, 10, "Weak Slam", Particle.DRAGON_BREATH, Races.ARCHER);
+    private final static Attack SLAM_LV_1 = new Slam(0.5D, 0, 10, "Weak Slam", Particle.DRAGON_BREATH, Races.ARCHER);
 
     //Lighting bolts
     private final static Attack LIGHTNING_LV_1 = new Lightning(4.0D, 30, 40, "Weak Lightning", null, Races.MAGE);

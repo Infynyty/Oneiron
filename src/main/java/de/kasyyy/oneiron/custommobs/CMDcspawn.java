@@ -1,13 +1,12 @@
 package de.kasyyy.oneiron.custommobs;
 
-import de.kasyyy.oneiron.custommobs.spawner.Spawner;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CMDcspawn implements CommandExecutor {
+public final class CMDcspawn implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
