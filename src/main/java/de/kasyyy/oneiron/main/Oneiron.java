@@ -39,6 +39,8 @@ public class Oneiron extends JavaPlugin {
 
     private static Oneiron instance = null;
 
+    //TODO: Test comment remove
+
     @Override
     public void onLoad() {
         MobRegistry.registerAllMobs();
