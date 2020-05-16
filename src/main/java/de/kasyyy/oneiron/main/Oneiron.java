@@ -3,25 +3,26 @@ package de.kasyyy.oneiron.main;
 import de.kasyyy.oneiron.custommobs.CMDcspawn;
 import de.kasyyy.oneiron.custommobs.MobRegistry;
 import de.kasyyy.oneiron.custommobs.OneironMobManager;
-import de.kasyyy.oneiron.custommobs.events.JockeySpawnEvent;
-import de.kasyyy.oneiron.custommobs.events.OMDamagedByOM;
-import de.kasyyy.oneiron.custommobs.events.OneironMobDeathEvent;
-import de.kasyyy.oneiron.custommobs.events.SlimeSplitEvent;
+import de.kasyyy.oneiron.custommobs.events.JockeySpawnListener;
+import de.kasyyy.oneiron.custommobs.events.OMDamagedByOMListener;
+import de.kasyyy.oneiron.custommobs.events.OneironMobDeathListener;
+import de.kasyyy.oneiron.custommobs.events.SlimeSplitListener;
 import de.kasyyy.oneiron.custommobs.spawner.CMDcspawner;
 import de.kasyyy.oneiron.custommobs.spawner.CMDspawnerdebug;
 import de.kasyyy.oneiron.custommobs.spawner.DebugBlockBreakEvent;
 import de.kasyyy.oneiron.custommobs.spawner.Spawner;
 import de.kasyyy.oneiron.items.CMDoneironItems;
-import de.kasyyy.oneiron.items.ExchangeEvent;
+import de.kasyyy.oneiron.items.ExchangeListener;
 import de.kasyyy.oneiron.items.MerchantClickEvent;
 import de.kasyyy.oneiron.items.armor.ArmorManager;
-import de.kasyyy.oneiron.items.armor.OneironArmor;
 import de.kasyyy.oneiron.items.weapons.WeaponManager;
 import de.kasyyy.oneiron.player.*;
 import de.kasyyy.oneiron.player.combo.AddRemovePlayerFromCPEvent;
 import de.kasyyy.oneiron.player.combo.ComboManager;
 import de.kasyyy.oneiron.player.combo.attack.Attack;
 import de.kasyyy.oneiron.player.events.*;
+import de.kasyyy.oneiron.player.events.changeArmor.ArmorListener;
+import de.kasyyy.oneiron.player.events.changeArmor.ChangeArmorListener;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -54,24 +55,25 @@ public class Oneiron extends JavaPlugin {
         logger = this.getLogger();
         Bukkit.getConsoleSender().sendMessage(Util.getPrefix() + "Oneiron enabled!");
 
-        this.getServer().getPluginManager().registerEvents(new JoinEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        this.getServer().getPluginManager().registerEvents(new ArmorListener(null), this);
         this.getServer().getPluginManager().registerEvents(new Race(), this);
         this.getServer().getPluginManager().registerEvents(new ComboManager(), this);
         this.getServer().getPluginManager().registerEvents(new AddRemovePlayerFromCPEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerDamageEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new FallDamageEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new HungerChangeEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerDamagedHungerEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new OneironMobDeathEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerRegenerationEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new SlimeSplitEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new OMDamagedByOM(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerDamageListener(), this);
+        this.getServer().getPluginManager().registerEvents(new FallDamageListener(), this);
+        this.getServer().getPluginManager().registerEvents(new HungerChangeListener(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerDamagedHungerListener(), this);
+        this.getServer().getPluginManager().registerEvents(new OneironMobDeathListener(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerRegenerationListener(), this);
+        this.getServer().getPluginManager().registerEvents(new SlimeSplitListener(), this);
+        this.getServer().getPluginManager().registerEvents(new OMDamagedByOMListener(), this);
         this.getServer().getPluginManager().registerEvents(new DebugBlockBreakEvent(), this);
         this.getServer().getPluginManager().registerEvents(new MerchantClickEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new ExchangeEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerAttackEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new JockeySpawnEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new ChangeArmorEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new ExchangeListener(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerAttackListener(), this);
+        this.getServer().getPluginManager().registerEvents(new JockeySpawnListener(), this);
+        this.getServer().getPluginManager().registerEvents(new ChangeArmorListener(), this);
 
         this.getCommand("cspawner").setExecutor(new CMDcspawner());
         this.getCommand("cspawn").setExecutor(new CMDcspawn());
@@ -98,8 +100,7 @@ public class Oneiron extends JavaPlugin {
                 while (resultSet.next()) {
                     OneironPlayer oneironPlayer = new OneironPlayer(UUID.fromString(resultSet.getString("uuid")));
                     Bukkit.getPlayer(UUID.fromString(resultSet.getString("uuid"))).sendMessage(Util.getDebug() + "Successfully loaded player!");
-                    JoinEvent.getAllOneironPlayers().put(oneironPlayer.getUuid(), oneironPlayer);
-                    OneironArmor.changeArmor(oneironPlayer);
+                    JoinListener.getAllOneironPlayers().put(oneironPlayer.getUuid(), oneironPlayer);
                     if (oneironPlayer.getClasses().equals(Races.NONE)) {
                         Bukkit.getPlayer(UUID.fromString(resultSet.getString("uuid"))).sendMessage(Util.getDebug() + "Please choose a class!");
                         Bukkit.getPlayer(UUID.fromString(resultSet.getString("uuid"))).openInventory(Race.getChooseInv());
@@ -145,12 +146,11 @@ public class Oneiron extends JavaPlugin {
 
         //Saves all oneiron players during a reload
         for(Player p : Bukkit.getOnlinePlayers()) {
-            if (JoinEvent.getAllOneironPlayers().containsKey(p.getUniqueId())) {
-                OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(p.getUniqueId());
-                OneironArmor.removeArmor(oneironPlayer);
+            if (JoinListener.getAllOneironPlayers().containsKey(p.getUniqueId())) {
+                OneironPlayer oneironPlayer = JoinListener.getAllOneironPlayers().get(p.getUniqueId());
                 oneironPlayer.saveToConfig();
                 Bukkit.getConsoleSender().sendMessage(Util.getDebug() + "Saved Player to config");
-                JoinEvent.getAllOneironPlayers().remove(p.getUniqueId());
+                JoinListener.getAllOneironPlayers().remove(p.getUniqueId());
             }
             Attack.getPlayerRegenerating().remove(p.getUniqueId());
             OneironPlayer.getPlayerRegenerating().remove(p.getUniqueId());

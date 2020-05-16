@@ -40,7 +40,7 @@ public class Race implements Listener {
     public void onInteract(InventoryClickEvent e) {
         if(e.getWhoClicked().getOpenInventory().getTopInventory().equals(chooseInv)) {
             e.setCancelled(true);
-            OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getWhoClicked().getUniqueId());
+            OneironPlayer oneironPlayer = JoinListener.getAllOneironPlayers().get(e.getWhoClicked().getUniqueId());
             if(e.getCurrentItem().equals(archer)) {
                 oneironPlayer.setRace(Races.ARCHER);
                 e.getWhoClicked().getOpenInventory().close();
@@ -58,7 +58,7 @@ public class Race implements Listener {
     @EventHandler
     public void closeInv(InventoryCloseEvent e) {
         if(e.getInventory().equals(chooseInv)) {
-            OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
+            OneironPlayer oneironPlayer = JoinListener.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
             if(oneironPlayer.getClasses().equals(Races.NONE)) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Oneiron.getInstance(), () -> {
                     e.getPlayer().openInventory(chooseInv);

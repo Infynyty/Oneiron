@@ -1,7 +1,7 @@
 package de.kasyyy.oneiron.util.runnables;
 
 import de.kasyyy.oneiron.custommobs.OneironMob;
-import de.kasyyy.oneiron.player.JoinEvent;
+import de.kasyyy.oneiron.player.JoinListener;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Location;
@@ -28,7 +28,7 @@ public class SlamDamage extends BukkitRunnable {
     @Override
     public void run() {
         if(i>5) {
-            OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(p.getUniqueId());
+            OneironPlayer oneironPlayer = JoinListener.getAllOneironPlayers().get(p.getUniqueId());
             oneironPlayer.setInvincible(false);
             cancel();
         }

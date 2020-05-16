@@ -1,6 +1,6 @@
 package de.kasyyy.oneiron.player.combo.attack.mage;
 
-import de.kasyyy.oneiron.player.JoinEvent;
+import de.kasyyy.oneiron.player.JoinListener;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.player.combo.attack.Attack;
@@ -14,7 +14,7 @@ public class Heal extends Attack {
 
     @Override
     protected void attack(Player p) {
-        OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(p.getUniqueId());
+        OneironPlayer oneironPlayer = JoinListener.getAllOneironPlayers().get(p.getUniqueId());
         oneironPlayer.heal(Math.round(oneironPlayer.getMaxHealth() / 8));
         p.getLocation().getWorld().spawnParticle(particle, p.getLocation(), 10);
     }

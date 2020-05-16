@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.Objects;
 
-public class ExchangeEvent implements Listener {
+public class ExchangeListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {

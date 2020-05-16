@@ -15,3 +15,4 @@ public class ForestSpider extends EntitySpider {
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, false));
     }
 }
+

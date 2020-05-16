@@ -11,7 +11,7 @@ public final class CMDSetRace implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if(command.getName().equalsIgnoreCase("setrace")) {
             if(!(commandSender instanceof Player)) return true;
-            OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(((Player) commandSender).getUniqueId());
+            OneironPlayer oneironPlayer = JoinListener.getAllOneironPlayers().get(((Player) commandSender).getUniqueId());
             if(strings.length == 1) {
                 try {
                     Races races = Races.valueOf(strings[0]);
