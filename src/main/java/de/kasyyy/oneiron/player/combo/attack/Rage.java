@@ -3,7 +3,7 @@ package de.kasyyy.oneiron.player.combo.attack;
 import de.kasyyy.oneiron.custommobs.OneironMob;
 import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
-import de.kasyyy.oneiron.player.JoinEvent;
+import de.kasyyy.oneiron.player.JoinListener;
 import de.kasyyy.oneiron.player.Races;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Particle;
@@ -43,7 +43,7 @@ public class Rage extends Attack {
 
                     entity.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, entity.getLocation(), 1);
                     if (oneironMob != null)
-                        Rage.super.attackOM(JoinEvent.getAllOneironPlayers().get(p.getUniqueId()), oneironMob);
+                        Rage.super.attackOM(JoinListener.getAllOneironPlayers().get(p.getUniqueId()), oneironMob);
                 }
             }.runTaskLater(Oneiron.getInstance(), 20);
         }

@@ -269,9 +269,26 @@ public class OneironPlayer {
         p.getLocation().getWorld().playSound(p.getLocation(), Sound.BLOCK_BELL_USE, 10.0F, 1.0F);
     }
 
+    /**
+     * Get the players damage which includes the damage of the weapon they are holding.
+     * @return
+     */
     public int getDamage() {
         Player player = Bukkit.getPlayer(uuid);
-        return Math.round(OneironWeapon.getOWFromIS().get(player.getItemInHand()).getDamage() + damage);
+        OneironWeapon oneironWeapon = OneironWeapon.getOWFromIS().get(player.getItemInHand());
+        if(oneironWeapon != null) {
+            return Math.round(oneironWeapon.getDamage() + damage);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Use this method to get the raw damage of the player, which doesn't include the weapon damage.
+     * @return
+     */
+    public int getRawDamage() {
+        return damage;
     }
 
 
@@ -380,7 +397,6 @@ public class OneironPlayer {
     }
 
     public void setDamage(int damage) {
-        Bukkit.broadcastMessage(Util.getDebug() + "Set damage to: " + damage);
         this.damage = damage;
     }
 

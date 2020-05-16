@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 
-public final class JoinEvent implements Listener {
+public final class JoinListener implements Listener {
     private Oneiron instance = Oneiron.getInstance();
     private static HashMap<UUID, OneironPlayer> allOneironPlayers = new HashMap<>();
     private static final int PLAYER_BASE_HEALTH = 100;
@@ -49,14 +49,12 @@ public final class JoinEvent implements Listener {
             if(resultSet.next()) {
                 oneironPlayer = new OneironPlayer(p.getUniqueId());
                 p.sendMessage(Util.getDebug() + "Succesfully loaded player");
-                OneironArmor.changeArmor(oneironPlayer);
 
             } else {
                 oneironPlayer = new OneironPlayer(p.getName(), p.getUniqueId(), 1
                         , PLAYER_BASE_HEALTH, PLAYER_BASE_MANA, 1, Races.NONE);
                 p.sendMessage(Util.getDebug() + "Successfully created new player");
                 oneironPlayer.saveToConfig();
-                OneironArmor.changeArmor(oneironPlayer);
 
             }
 
@@ -84,7 +82,6 @@ public final class JoinEvent implements Listener {
     public void onLeave(final PlayerQuitEvent e) {
         if(allOneironPlayers.containsKey(e.getPlayer().getUniqueId())) {
             OneironPlayer oneironPlayer = allOneironPlayers.get(e.getPlayer().getUniqueId());
-            OneironArmor.removeArmor(oneironPlayer);
             oneironPlayer.saveToConfig();
             Bukkit.getConsoleSender().sendMessage(Util.getDebug() + "Saved Player to config");
             allOneironPlayers.remove(e.getPlayer().getUniqueId());

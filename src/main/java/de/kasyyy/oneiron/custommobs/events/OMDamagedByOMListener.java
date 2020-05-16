@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.logging.Level;
 
-public class OMDamagedByOM implements Listener {
+public class OMDamagedByOMListener implements Listener {
 
     //Handles the damage if one OneironMob attacks another
     @EventHandler

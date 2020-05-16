@@ -2,7 +2,7 @@ package de.kasyyy.oneiron.player.combo;
 
 import de.kasyyy.oneiron.items.weapons.OneironWeapon;
 import de.kasyyy.oneiron.main.Oneiron;
-import de.kasyyy.oneiron.player.JoinEvent;
+import de.kasyyy.oneiron.player.JoinListener;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.DelayedTask;
@@ -46,7 +46,7 @@ public final class ComboManager implements Listener {
 
         if(coolDown.contains(p.getUniqueId())) return;
 
-        if(!(JoinEvent.getAllOneironPlayers().containsKey(p.getUniqueId()))) {
+        if(!(JoinListener.getAllOneironPlayers().containsKey(p.getUniqueId()))) {
             Bukkit.getConsoleSender().sendMessage(Util.getDebug() + "Not in list");
             p.kickPlayer(Util.getErrReload());
             return;
@@ -54,7 +54,7 @@ public final class ComboManager implements Listener {
         if(!(OneironWeapon.getRaceSpecificList()).containsKey(OneironWeapon.getOWFromIS().get(e.getPlayer().getItemInHand()))) {
             return;
         }
-        OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
+        OneironPlayer oneironPlayer = JoinListener.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
         if(!(oneironPlayer.getClasses() == OneironWeapon.getRaceSpecificList().get(OneironWeapon.getOWFromIS().get(e.getPlayer().getItemInHand())))) {
             e.getPlayer().sendMessage(Util.getDebug() + "Your race is wrong");
             return;

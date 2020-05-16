@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class PlayerAttackEvent implements Listener {
+public class PlayerAttackListener implements Listener {
 
     //Keep a player from manually hitting
     @EventHandler

@@ -1,7 +1,7 @@
 package de.kasyyy.oneiron.custommobs;
 
 import de.kasyyy.oneiron.items.OneironItem;
-import de.kasyyy.oneiron.player.JoinEvent;
+import de.kasyyy.oneiron.player.JoinListener;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.ChatColor;
@@ -57,7 +57,7 @@ public class OneironMob extends OneironMobTemplate{
                     }
                 }
             }
-            OneironPlayer oneironPlayer = JoinEvent.getAllOneironPlayers().get(damager.getUniqueId());
+            OneironPlayer oneironPlayer = JoinListener.getAllOneironPlayers().get(damager.getUniqueId());
             oneironPlayer.addXP(this.xp);
         }
 

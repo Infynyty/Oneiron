@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-public class OneironMobDeathEvent implements Listener {
+public class OneironMobDeathListener implements Listener {
 
     @EventHandler
     public void onDeath(EntityDeathEvent e) {

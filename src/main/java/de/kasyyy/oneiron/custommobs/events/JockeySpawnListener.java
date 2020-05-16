@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 
-public class JockeySpawnEvent implements Listener {
+public class JockeySpawnListener implements Listener {
 
     @EventHandler
     public void onSpawnJockey(CreatureSpawnEvent e) {
