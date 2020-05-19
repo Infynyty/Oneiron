@@ -41,36 +41,56 @@ public abstract class OneironItem {
             case UNCOMMON:
                 itemMeta.setDisplayName(ChatColor.DARK_BLUE + itemMeta.getDisplayName());
                 itemMeta.setLore(new ArrayList<String>() {{
-                    addAll(itemMeta.getLore());
-                    add(ChatColor.DARK_BLUE + "Uncommon");
+                    if(itemMeta.getLore() != null) {
+                        addAll(itemMeta.getLore());
+                        add(ChatColor.DARK_BLUE + "Uncommon");
+                    } else {
+                        add(ChatColor.DARK_BLUE + "Uncommon");
+                    }
                 }});
                 break;
             case RARE:
                 itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + itemMeta.getDisplayName());
                 itemMeta.setLore(new ArrayList<String>() {{
-                    addAll(itemMeta.getLore());
-                    add(ChatColor.LIGHT_PURPLE + "Rare");
+                    if(itemMeta.getLore() != null) {
+                        addAll(itemMeta.getLore());
+                        add(ChatColor.LIGHT_PURPLE + "Rare");
+                    } else {
+                        add(ChatColor.LIGHT_PURPLE + "Rare");
+                    }
                 }});
                 break;
             case LEGENDARY:
                 itemMeta.setDisplayName(ChatColor.BOLD + "" + ChatColor.AQUA + itemMeta.getDisplayName());
                 itemMeta.setLore(new ArrayList<String>() {{
-                    addAll(itemMeta.getLore());
-                    add(ChatColor.AQUA + "Legendary");
+                    if(itemMeta.getLore() != null) {
+                        addAll(itemMeta.getLore());
+                        add(ChatColor.AQUA + "Legendary");
+                    } else {
+                        add(ChatColor.AQUA + "Legendary");
+                    }
                 }});
                 break;
             case MYTHIC:
                 itemMeta.setDisplayName(ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + itemMeta.getDisplayName());
                 itemMeta.setLore(new ArrayList<String>() {{
-                    addAll(itemMeta.getLore());
-                    add(ChatColor.DARK_PURPLE + "Mythic");
+                    if(itemMeta.getLore() != null) {
+                        addAll(itemMeta.getLore());
+                        add(ChatColor.DARK_PURPLE + "Mythic");
+                    } else {
+                        add(ChatColor.DARK_PURPLE + "Mythic");
+                    }
                 }});
                 break;
             case QUEST:
                 itemMeta.setDisplayName(ChatColor.YELLOW + itemMeta.getDisplayName());
                 itemMeta.setLore(new ArrayList<String>() {{
-                    addAll(itemMeta.getLore());
-                    add(ChatColor.YELLOW + "Quest item");
+                    if(itemMeta.getLore() != null) {
+                        addAll(itemMeta.getLore());
+                        add(ChatColor.YELLOW + "Quest item");
+                    } else {
+                        add(ChatColor.YELLOW + "Quest item");
+                    }
                 }});
                 dropable = false;
                 sellable = false;

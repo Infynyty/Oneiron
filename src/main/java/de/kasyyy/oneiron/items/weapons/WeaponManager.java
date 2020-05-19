@@ -18,7 +18,7 @@ public class WeaponManager {
     private static WeaponManager weaponManager = null;
 
     private final OneironItem weakStaff;
-    private final OneironWeapon greatStaff;
+    private final OneironItem greatStaff;
     private final OneironItem birchWoodStaff;
     private final OneironItem shepherdsStaff;
     private final OneironItem wandOfSleep;
@@ -58,7 +58,7 @@ public class WeaponManager {
         return weakStaff;
     }
 
-    public OneironWeapon getGreatStaff() {
+    public OneironItem getGreatStaff() {
         return greatStaff;
     }
 

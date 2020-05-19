@@ -212,6 +212,9 @@ public class Oneiron extends JavaPlugin {
                     "uuid VARCHAR(36), " +
                     "maxHealth SMALLINT, " +
                     "maxMana SMALLINT, " +
+                    "damage SMALLINT, " +
+                    "speed SMALLINT, " +
+                    "defense SMALLINT, " +
                     "level SMALLINT, " +
                     "xp INT)");
             createTable.executeUpdate("CREATE TABLE IF NOT EXISTS OneironSpawner (" +

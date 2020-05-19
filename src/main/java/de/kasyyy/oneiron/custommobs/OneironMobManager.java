@@ -18,6 +18,7 @@ public class OneironMobManager {
         add(OneironCurrency.SCRAP_METAL);
         add(WeaponManager.getInstance().getShepherdsStaff());
         add(ArmorManager.getInstance().leatherJacket);
+        add(ArmorManager.getInstance().shinyPants);
     }};
     private static ArrayList<OneironItem> advancedDrops = new ArrayList<OneironItem>(){{addAll(basicDrops); add(WeaponManager.getInstance().getShepherdsStaff()); add(WeaponManager.getInstance().getGreatStaff());}};
 

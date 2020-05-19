@@ -1,18 +1,15 @@
 package de.kasyyy.oneiron.items;
 
+import com.destroystokyo.paper.entity.Pathfinder;
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import de.kasyyy.oneiron.items.weapons.WeaponManager;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 
 public class MerchantClickEvent implements Listener {
@@ -40,5 +37,8 @@ public class MerchantClickEvent implements Listener {
         if(e.getCurrentItem().getItemMeta().getDisplayName().contains(name)) {
             ItemExchange.buyItem((Player) e.getWhoClicked(), weaponManager.getShepherdsStaff().getItemStack(), weaponManager.getShepherdsStaff().getValue());
         }
+
+        LivingEntity slime = (Slime) e.getWhoClicked().getWorld().spawnEntity(e.getWhoClicked().getLocation(), EntityType.SLIME);
+
     }
 }

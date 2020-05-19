@@ -13,11 +13,14 @@ public class ArmorManager {
     private static ArmorManager armorManager = null;
 
     public final OneironItem leatherJacket;
+    public final OneironItem shinyPants;
 
     private ArmorManager() {
         leatherJacket = new OneironArmor(5, Util.crItem(Material.LEATHER_CHESTPLATE, 1, "Leather Jacket", null)
                 , 1000, Rarity.COMMON, 50, 50, 1, 30, 100);
         Bukkit.getLogger().log(Level.INFO, "Loaded all Oneiron armor pieces!");
+        shinyPants = new OneironArmor(10, Util.crItem(Material.DIAMOND_LEGGINGS, 1, "Shiny Pants", null),
+                1000, Rarity.RARE, 50, 50, 1, 20, 200);
     }
 
     public static ArmorManager getInstance() {

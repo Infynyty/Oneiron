@@ -48,14 +48,20 @@ public class OneironPlayer {
                         "?, " +
                         "?, " +
                         "?, " +
+                        "?, " +
+                        "?, " +
+                        "?, " +
                         "?)"
         )) {
             preparedStatement.setString(1, race.toString());
             preparedStatement.setString(2, uuid.toString());
             preparedStatement.setInt(3, maxHealth);
             preparedStatement.setInt(4, maxMana);
-            preparedStatement.setInt(5, level);
-            preparedStatement.setInt(6, xp);
+            preparedStatement.setInt(5, damage);
+            preparedStatement.setInt(6, speed);
+            preparedStatement.setInt(7, defense);
+            preparedStatement.setInt(8, level);
+            preparedStatement.setInt(9, xp);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,6 +100,9 @@ public class OneironPlayer {
                     this.level = resultSet.getInt("level");
                     this.xp = resultSet.getInt("xp");
                     this.maxMana = resultSet.getInt("maxMana");
+                    this.damage = resultSet.getInt("damage");
+                    this.speed = resultSet.getInt("speed");
+                    this.defense = resultSet.getInt("defense");
                 } while(resultSet.next());
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -102,9 +111,6 @@ public class OneironPlayer {
             this.health = this.maxHealth;
             this.mana = this.maxMana;
             setRace(race);
-        this.damage = 0;
-        this.speed = 1;
-        this.defense = 0;
     }
 
 
@@ -116,14 +122,23 @@ public class OneironPlayer {
                         "level = ?, " +
                         "maxHealth = ?, " +
                         "maxMana = ?, " +
-                        "xp = ? WHERE uuid = ?"
+                        "damage = ?, " +
+                        "speed = ?, " +
+                        "defense = ?, " +
+                        "level = ?, " +
+                        "xp = ? " +
+                        "WHERE uuid = ?"
         )) {
             preparedStatement.setString(1, race.toString());
             preparedStatement.setInt(2, level);
             preparedStatement.setInt(3, maxHealth);
             preparedStatement.setInt(4, maxMana);
-            preparedStatement.setInt(5, xp);
-            preparedStatement.setString(6, uuid.toString());
+            preparedStatement.setInt(5, damage);
+            preparedStatement.setInt(6, speed);
+            preparedStatement.setInt(7, defense);
+            preparedStatement.setInt(8, level);
+            preparedStatement.setInt(9, xp);
+            preparedStatement.setString(10, uuid.toString());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -291,16 +306,48 @@ public class OneironPlayer {
         return damage;
     }
 
+    public void removeArmorEffects() {
+        for(ItemStack itemStack : Bukkit.getPlayer(uuid).getInventory().getArmorContents()) {
+            OneironArmor armor = OneironArmor.getoAFromIS().get(itemStack);
+
+            if(armor != null) {
+
+                setMaxHealth(getMaxHealth() - armor.getAddedHealth());
+                setMaxMana(getMaxMana() - armor.getAddedMana());
+                setDefense(getDefense() - armor.getAddedDefense());
+                setSpeed(getSpeed() - armor.getAddedSpeed());
+                setDamage(getRawDamage() - armor.getAddedDamage());
+
+            }
+        }
+    }
+
 
     public void setLevel(int level) {
         this.level = level;
     }
 
+    /**
+     * Set the maximum amount of health a player can have. If the new amount is smaller than his current health,
+     * the current health will be set to the maximum health.
+     * @param maxHealth
+     */
     public void setMaxHealth(int maxHealth) {
+        if(maxHealth < health) {
+            health = maxHealth;
+        }
         this.maxHealth = maxHealth;
     }
 
+    /**
+     * Set the maximum amount of mana a player can have. If the new amount is smaller than his current mana,
+     * the current mana will be set to the maximum mana.
+     * @param maxMana
+     */
     public void setMaxMana(int maxMana) {
+        if(maxMana < mana) {
+            mana = maxMana;
+        }
         this.maxMana = maxMana;
     }
 

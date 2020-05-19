@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,10 +30,8 @@ public final class JoinListener implements Listener {
     /**
      * Tries to get the OneironPlayer from the config.
      * If the player is not found there a new one will be created.
-     *
      * @param e
      */
-
     @EventHandler
     public void onJoin(final PlayerJoinEvent e) {
         Player p = e.getPlayer();
@@ -80,8 +79,10 @@ public final class JoinListener implements Listener {
      */
     @EventHandler
     public void onLeave(final PlayerQuitEvent e) {
+        //Armor effects need to be removed, because the ArmorChangeEvent is called during joining
+        OneironPlayer oneironPlayer = allOneironPlayers.get(e.getPlayer().getUniqueId());
+        oneironPlayer.removeArmorEffects();
         if(allOneironPlayers.containsKey(e.getPlayer().getUniqueId())) {
-            OneironPlayer oneironPlayer = allOneironPlayers.get(e.getPlayer().getUniqueId());
             oneironPlayer.saveToConfig();
             Bukkit.getConsoleSender().sendMessage(Util.getDebug() + "Saved Player to config");
             allOneironPlayers.remove(e.getPlayer().getUniqueId());
