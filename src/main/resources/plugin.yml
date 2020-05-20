@@ -17,3 +17,5 @@ commands:
     description: Sets a players race
   lvlreset:
     description: Resets a players level and race
+  setspeed:
+    description: Resets a players speed

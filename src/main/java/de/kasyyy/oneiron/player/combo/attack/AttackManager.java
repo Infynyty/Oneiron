@@ -14,7 +14,7 @@ public final class AttackManager {
     }
 
     //Flame
-    private static final Attack FLAME = new BasicFlame(1.0D, 0, 0, "Basic Flame", null, Races.MAGE);
+    private static final Attack FLAME = new BasicFlame(1.0D, 7, 0, "Basic Flame", null, Races.MAGE);
 
     //Explosions
     private static final Attack EXPLOSION_LV_1 = new Explosion(2.0D, 20, 10, "Weak Explosion", Particle.EXPLOSION_NORMAL, Races.MAGE);

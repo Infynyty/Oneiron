@@ -9,6 +9,7 @@ import de.kasyyy.oneiron.items.OneironItem;
 import de.kasyyy.oneiron.items.armor.ArmorManager;
 import de.kasyyy.oneiron.items.weapons.WeaponManager;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class OneironMobManager {
@@ -19,6 +20,7 @@ public class OneironMobManager {
         add(WeaponManager.getInstance().getShepherdsStaff());
         add(ArmorManager.getInstance().leatherJacket);
         add(ArmorManager.getInstance().shinyPants);
+
     }};
     private static ArrayList<OneironItem> advancedDrops = new ArrayList<OneironItem>(){{addAll(basicDrops); add(WeaponManager.getInstance().getShepherdsStaff()); add(WeaponManager.getInstance().getGreatStaff());}};
 

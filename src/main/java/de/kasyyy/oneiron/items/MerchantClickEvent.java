@@ -37,8 +37,5 @@ public class MerchantClickEvent implements Listener {
         if(e.getCurrentItem().getItemMeta().getDisplayName().contains(name)) {
             ItemExchange.buyItem((Player) e.getWhoClicked(), weaponManager.getShepherdsStaff().getItemStack(), weaponManager.getShepherdsStaff().getValue());
         }
-
-        LivingEntity slime = (Slime) e.getWhoClicked().getWorld().spawnEntity(e.getWhoClicked().getLocation(), EntityType.SLIME);
-
     }
 }

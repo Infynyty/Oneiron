@@ -1,6 +1,7 @@
 package de.kasyyy.oneiron.custommobs;
 
 import de.kasyyy.oneiron.items.OneironItem;
+import de.kasyyy.oneiron.items.armor.OneironArmor;
 import de.kasyyy.oneiron.player.JoinListener;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.util.Util;
@@ -54,6 +55,7 @@ public class OneironMob extends OneironMobTemplate{
                     int i = ThreadLocalRandom.current().nextInt(1000);
                     if (i < oneironItem.getDropChance()) {
                         this.entity.getLocation().getWorld().dropItem(this.getEntity().getLocation(), oneironItem.getItemStack());
+                        this.entity.getLocation().getWorld().dropItem(this.getEntity().getLocation(), OneironArmor.getAllArmorPieces().get(0).getItemStack());
                     }
                 }
             }

@@ -7,6 +7,8 @@ import de.kasyyy.oneiron.player.JoinListener;
 import de.kasyyy.oneiron.player.OneironPlayer;
 import de.kasyyy.oneiron.util.Util;
 import de.kasyyy.oneiron.util.runnables.HealthRegeneration;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -19,6 +21,7 @@ public class ChangeArmorListener implements Listener {
         OneironPlayer oneironPlayer = JoinListener.getAllOneironPlayers().get(e.getPlayer().getUniqueId());
         OneironArmor oldArmor = OneironArmor.getoAFromIS().get(e.getOldItem());
         OneironArmor newArmor = OneironArmor.getoAFromIS().get(e.getNewItem());
+        Player p = Bukkit.getPlayer(oneironPlayer.getUuid());
 
         if(oldArmor != null) {
 
@@ -27,6 +30,8 @@ public class ChangeArmorListener implements Listener {
             oneironPlayer.setDefense(oneironPlayer.getDefense() - oldArmor.getAddedDefense());
             oneironPlayer.setSpeed(oneironPlayer.getSpeed() - oldArmor.getAddedSpeed());
             oneironPlayer.setDamage(oneironPlayer.getRawDamage() - oldArmor.getAddedDamage());
+
+            p.setWalkSpeed(p.getWalkSpeed() - ((float) oldArmor.getAddedSpeed()/10));
             e.getPlayer().sendMessage(Util.getDebug() + "Removed: Health: " + oneironPlayer.getMaxHealth());
 
         }
@@ -36,6 +41,8 @@ public class ChangeArmorListener implements Listener {
             oneironPlayer.setDefense(oneironPlayer.getDefense() + newArmor.getAddedDefense());
             oneironPlayer.setSpeed(oneironPlayer.getSpeed() + newArmor.getAddedSpeed());
             oneironPlayer.setDamage(oneironPlayer.getRawDamage() + newArmor.getAddedDamage());
+            p.setWalkSpeed(p.getWalkSpeed() + ((float) newArmor.getAddedSpeed()/10));
+
             e.getPlayer().sendMessage(Util.getDebug() + "Added: Health: " + oneironPlayer.getMaxHealth());
             if(!OneironPlayer.getPlayerRegenerating().contains(oneironPlayer.getUuid())) {
                 new HealthRegeneration(oneironPlayer, 10, OneironPlayer.getPlayerRegenerating()).runTaskTimer(Oneiron.getInstance(), 20 * 3, 20);

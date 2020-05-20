@@ -21,7 +21,6 @@ import de.kasyyy.oneiron.player.combo.AddRemovePlayerFromCPEvent;
 import de.kasyyy.oneiron.player.combo.ComboManager;
 import de.kasyyy.oneiron.player.combo.attack.Attack;
 import de.kasyyy.oneiron.player.events.*;
-import de.kasyyy.oneiron.player.events.changeArmor.ArmorListener;
 import de.kasyyy.oneiron.player.events.changeArmor.ChangeArmorListener;
 import de.kasyyy.oneiron.util.Util;
 import org.bukkit.Bukkit;
@@ -56,7 +55,6 @@ public class Oneiron extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(Util.getPrefix() + "Oneiron enabled!");
 
         this.getServer().getPluginManager().registerEvents(new JoinListener(), this);
-        this.getServer().getPluginManager().registerEvents(new ArmorListener(null), this);
         this.getServer().getPluginManager().registerEvents(new Race(), this);
         this.getServer().getPluginManager().registerEvents(new ComboManager(), this);
         this.getServer().getPluginManager().registerEvents(new AddRemovePlayerFromCPEvent(), this);
@@ -81,6 +79,7 @@ public class Oneiron extends JavaPlugin {
         this.getCommand("setrace").setExecutor(new CMDSetRace());
         this.getCommand("lvlreset").setExecutor(new CMDLevelReset());
         this.getCommand("spawnerdebug").setExecutor(new CMDspawnerdebug());
+        this.getCommand("setspeed").setExecutor(new CMDSetSpeed());
         setupConfig();
         setUpSQL();
         Spawner.reloadSpawner();
@@ -216,13 +215,25 @@ public class Oneiron extends JavaPlugin {
                     "speed SMALLINT, " +
                     "defense SMALLINT, " +
                     "level SMALLINT, " +
-                    "xp INT)");
+                    "xp INT);");
             createTable.executeUpdate("CREATE TABLE IF NOT EXISTS OneironSpawner (" +
                     "world VARCHAR(20), " +
                     "x INT, " +
                     "y INT, " +
                     "z INT, " +
-                    "entity VARCHAR(60))");
+                    "entity VARCHAR(60));");
+            createTable.executeUpdate("CREATE TABLE IF NOT EXISTS OneironArmor (" +
+                    "value SMALLINT, " +
+                    "itemStack VARCHAR(30), " +
+                    "name VARCHAR(20), " +
+                    "lore VARCHAR(100), " +
+                    "dropChance SMALLINT, " +
+                    "rarity VARCHAR(20), " +
+                    "addedHealth SMALLINT, " +
+                    "addedMana SMALLINT, " +
+                    "addedSpeed SMALLINT, " +
+                    "addedDefense SMALLINT, " +
+                    "addedDamage SMALLINT);");
             logger.log(Level.INFO, "Connected to Database");
         } catch (SQLException e) {
             e.printStackTrace();
